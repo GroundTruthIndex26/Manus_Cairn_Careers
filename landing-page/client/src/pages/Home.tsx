@@ -55,8 +55,8 @@ const premiumPricing: Record<BillingCycle, { regular: string; prelaunch: string;
 // Add the two Stripe Payment Link URLs in the preview/deployment environment.
 // The CTAs become live checkout links as soon as these values are supplied.
 const premiumPaymentLinks: Record<BillingCycle, string> = {
-  monthly: import.meta.env.VITE_STRIPE_PREMIUM_MONTHLY_PAYMENT_LINK || "",
-  annual: import.meta.env.VITE_STRIPE_PREMIUM_ANNUAL_PAYMENT_LINK || "",
+  monthly: import.meta.env.VITE_STRIPE_PREMIUM_MONTHLY_PAYMENT_LINK || "https://buy.stripe.com/fZu6oHbNN64n0vYaaB2VG0f",
+  annual: import.meta.env.VITE_STRIPE_PREMIUM_ANNUAL_PAYMENT_LINK || "https://buy.stripe.com/dRm14n6ttfEX2E60A12VG0e",
 };
 
 const localeOptions: Record<
