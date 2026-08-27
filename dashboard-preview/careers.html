@@ -161,6 +161,26 @@ sup a{color:inherit; font-weight:700; text-decoration:none; border-bottom:2px so
 .card.chrome:has(#zip) .g-split>div:nth-child(2) .tiny{color:#c7d7d4 !important}
 @media (max-width:980px){.card.chrome:has(#zip){padding:52px 16px 20px}.card.chrome:has(#zip) .g-split{gap:48px}.card.chrome:has(#zip) .g-split>div:nth-child(2)::before{top:-35px}}
 
+/* Let the inputs and result carry the hierarchy, rather than a heavily framed container. */
+.card.chrome:has(#zip){background:rgba(255,254,250,.66);border-width:2px;box-shadow:5px 5px 0 var(--ink),9px 9px 0 var(--cyan)}
+.card.chrome:has(#zip)::before{border-color:#84918d;background:rgba(255,254,250,.82);color:#55615d}
+.card.chrome:has(#zip) .g-split{gap:36px}
+.card.chrome:has(#zip) .g-split::after{content:"→";position:absolute;z-index:4;top:50%;left:44.4%;display:grid;place-items:center;width:34px;height:34px;border:2px solid var(--ink);border-radius:50%;background:var(--cyan);box-shadow:3px 3px 0 var(--ink);font-family:"Archivo Black",Impact,sans-serif;font-size:1rem;line-height:1;transform:translate(-50%,-50%)}
+.card.chrome:has(#zip) .g-split>div:first-child{padding-right:8px}
+.card.chrome:has(#zip) .g-split>div:first-child::before{width:7px;border-color:#4f6865;background:linear-gradient(to bottom,var(--cyan) 0 52%,transparent 52% 58%,var(--cyan) 58% 100%)}
+.card.chrome:has(#zip) #zipname{display:flex;align-items:center;gap:8px;font-size:.7rem;color:#51615d}
+.card.chrome:has(#zip) #zipname::after{content:"location set";padding:2px 5px;border:1px solid #6d7d78;font-size:.54rem;letter-spacing:.08em;text-transform:uppercase}
+.card.chrome:has(#zip) #zipname+div{padding:7px 9px!important;border:1px solid #b7c2be!important;background:rgba(255,255,255,.38);font-size:.63rem;line-height:1.4;color:#65706c}
+.card.chrome:has(#zip) #cond{padding-top:14px}
+.card.chrome:has(#zip) #cond::after{content:"selected condition →";position:absolute;right:0;bottom:-17px;font-family:"Space Mono",monospace;font-size:.53rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#55706c}
+.card.chrome:has(#zip) #cond .btn{border-color:#8a9691;color:#59635f;background:rgba(255,254,250,.6);box-shadow:none}
+.card.chrome:has(#zip) #cond .btn.on{border-color:var(--ink);background:var(--cyan);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.card.chrome:has(#zip) .g-split>div:nth-child(2){border-width:2px;border-top-width:7px!important;padding:22px!important;box-shadow:4px 4px 0 var(--ink)}
+.card.chrome:has(#zip) .g-split>div:nth-child(2) .kv{border-color:rgba(255,255,255,.22)!important;color:#c6d2d0}
+.card.chrome:has(#zip) .g-split>div:nth-child(2) .kv:last-child b{color:var(--cyan)}
+.card.chrome:has(#zip) .g-split>div:nth-child(2) .tiny{font-size:.67rem;line-height:1.48;color:#a8bbb7!important}
+@media (max-width:980px){.card.chrome:has(#zip) .g-split{gap:52px}.card.chrome:has(#zip) .g-split::after{top:calc(50% - 4px);left:50%;transform:translate(-50%,-50%) rotate(90deg)}.card.chrome:has(#zip) #cond::after{bottom:-20px}}
+
 @media (max-width:980px){
   .g2,.g3,.g4,.g-hero,.tiles,.g-split{grid-template-columns:1fr}
   h1.t{font-size:1.85rem}
