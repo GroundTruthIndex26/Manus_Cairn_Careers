@@ -1,0 +1,641 @@
+/**
+ * CairnCareers revision style note: Y2K editorial utility, asymmetric field-note
+ * modules, one solid-lime CTA, candid proof placeholders, and fast mobile behavior.
+ */
+import {
+  ArrowRight,
+  BarChart3,
+  CalendarDays,
+  Check,
+  ChevronDown,
+  CirclePlay,
+  ExternalLink,
+  FileCheck2,
+  Globe2,
+  LayoutDashboard,
+  LockKeyhole,
+  Mail,
+  Map,
+  Menu,
+  ShieldCheck,
+  Sparkles,
+  UserRound,
+  X,
+} from "lucide-react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+
+const ASSETS = {
+  hero: "/manus-storage/cairn-route-map-hero-optimized_902096c6.webp",
+  founder: "/manus-storage/cairn-founder_da875aec.webp",
+};
+
+type LocaleKey = "en-US" | "en-CA" | "en-GB";
+type CampaignKey = "default" | "campus" | "social";
+
+const localeOptions: Record<
+  LocaleKey,
+  { label: string; short: string; price: string; note: string }
+> = {
+  "en-US": {
+    label: "United States · English",
+    short: "US · USD",
+    price: "US$30 USD",
+    note: "Final charge: US$30 USD",
+  },
+  "en-CA": {
+    label: "Canada · English (pilot)",
+    short: "CA · CAD",
+    price: "Approx. CA$41 CAD",
+    note: "Final charge: US$30 USD · card issuer sets conversion",
+  },
+  "en-GB": {
+    label: "United Kingdom · English (pilot)",
+    short: "UK · GBP",
+    price: "Approx. £23 GBP",
+    note: "Final charge: US$30 USD · card issuer sets conversion",
+  },
+};
+
+const campaignVariants: Record<
+  CampaignKey,
+  { label: string; eyebrow: string; body: string }
+> = {
+  default: {
+    label: "Default",
+    eyebrow: "For college students and recent graduates",
+    body: "Compare realistic career paths using salary, job growth, and AI context—then leave with a next move you can explain.",
+  },
+  campus: {
+    label: "Campus partner",
+    eyebrow: "From campus to a first role that fits",
+    body: "Turn your coursework, experiences, and interests into a career route you can discuss with an adviser, professor, or recruiter.",
+  },
+  social: {
+    label: "Paid social",
+    eyebrow: "Worried AI changes your first-job options?",
+    body: "See which tasks are exposed, which skills stay durable, and what to do next—without asking a general chatbot to guess.",
+  },
+};
+
+const steps = [
+  ["01", "Bring what you know", "Your interests, coursework, experience, and the work that holds your attention."],
+  ["02", "Read the whole picture", "Salary, job growth, and AI exposure in one place—not isolated numbers."],
+  ["03", "Leave with a route", "A practical LinkedIn, networking, and first-conversation direction."],
+];
+
+const DASHBOARD_PREVIEW_URL = "https://cairncareers.com/dashboard-preview/index.html";
+
+const dashboardAreas = [
+  {
+    number: "01",
+    title: "Evidence",
+    body: "Turn real work into proof that strengthens a resume bullet, LinkedIn line, and interview answer.",
+    href: "https://cairncareers.com/dashboard-preview/evidence.html",
+    accent: "lime",
+  },
+  {
+    number: "02",
+    title: "Portfolio",
+    body: "Keep the work itself beside the claim it supports—case studies, reports, prototypes, and decks.",
+    href: "https://cairncareers.com/dashboard-preview/portfolio.html",
+    accent: "cyan",
+  },
+  {
+    number: "03",
+    title: "Resume",
+    body: "See how one update can carry through a clean, standard resume built from real evidence.",
+    href: "https://cairncareers.com/dashboard-preview/resume.html",
+    accent: "pink",
+  },
+  {
+    number: "04",
+    title: "LinkedIn",
+    body: "Preview copyable profile blocks without scraping, password requests, or opaque automation.",
+    href: "https://cairncareers.com/dashboard-preview/linkedin.html",
+    accent: "amber",
+  },
+  {
+    number: "05",
+    title: "Network",
+    body: "Follow warm paths and use the exact message that makes a first outreach easier to send.",
+    href: "https://cairncareers.com/dashboard-preview/network.html",
+    accent: "cyan",
+  },
+  {
+    number: "06",
+    title: "Interview",
+    body: "Practice a direct answer to the question every student expects: what will AI take over?",
+    href: "https://cairncareers.com/dashboard-preview/interview.html",
+    accent: "lime",
+  },
+  {
+    number: "07",
+    title: "Careers",
+    body: "Compare pay, growth, work location, and AI context without pretending money changes the score.",
+    href: "https://cairncareers.com/dashboard-preview/careers.html",
+    accent: "amber",
+  },
+  {
+    number: "08",
+    title: "Roadmap",
+    body: "See a term-by-term route that closes the biggest evidence gaps first.",
+    href: "https://cairncareers.com/dashboard-preview/roadmap.html",
+    accent: "pink",
+  },
+  {
+    number: "09",
+    title: "Clean-up",
+    body: "Understand the privacy-first path for sensitive context that should never be described to a model.",
+    href: "https://cairncareers.com/dashboard-preview/cleanup.html",
+    accent: "lime",
+  },
+];
+
+function SectionLabel({ number, children }: { number: string; children: React.ReactNode }) {
+  return (
+    <div className="section-label">
+      <span>{number}</span>
+      <span>{children}</span>
+    </div>
+  );
+}
+
+function CairnMark() {
+  return (
+    <span className="cairn-mark" aria-hidden="true">
+      <i className="stone stone-one" />
+      <i className="stone stone-two" />
+      <i className="stone stone-three" />
+    </span>
+  );
+}
+
+function ProofPhotoSlot({ index }: { index: number }) {
+  return (
+    <article className="story-slot">
+      <div className="photo-slot" aria-label={`Reserved real student photo slot ${index}`}>
+        <UserRound aria-hidden="true" />
+        <span>Permissioned real photo</span>
+      </div>
+      <div className="story-slot-body">
+        <div className="slot-badge">Reserved story {index}</div>
+        <h3>Student name + program</h3>
+        <p>Specific before-and-after result, written only after verification and consent.</p>
+        <div className="slot-requirements">
+          <span><Check /> Full name</span>
+          <span><Check /> Measurable result</span>
+          <span><Check /> Consent date</span>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function MetricSlot({ label }: { label: string }) {
+  return (
+    <div className="metric-slot">
+      <span className="metric-value">—</span>
+      <strong>{label}</strong>
+      <small>Publish with cohort, date range, and source</small>
+    </div>
+  );
+}
+
+export default function Home() {
+  const [locale, setLocale] = useState<LocaleKey>("en-US");
+  const [campaign, setCampaign] = useState<CampaignKey>("default");
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [showLeadModal, setShowLeadModal] = useState(false);
+  const [showLeadTab, setShowLeadTab] = useState(false);
+  const [email, setEmail] = useState("");
+  const localized = localeOptions[locale];
+  const message = campaignVariants[campaign];
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const source = (params.get("utm_source") || params.get("source") || "").toLowerCase();
+    const localeParam = params.get("locale") as LocaleKey | null;
+    if (source.includes("campus")) setCampaign("campus");
+    if (source.includes("social")) setCampaign("social");
+    if (localeParam && localeOptions[localeParam]) setLocale(localeParam);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    const params = new URLSearchParams(window.location.search);
+    params.set("locale", locale);
+    if (campaign === "default") params.delete("source");
+    else params.set("source", campaign);
+    const query = params.toString();
+    window.history.replaceState({}, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
+  }, [campaign, locale]);
+
+  useEffect(() => {
+    const onScroll = () => setShowLeadTab(window.scrollY > 680);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    let armed = false;
+    const armTimer = window.setTimeout(() => { armed = true; }, 8000);
+    const mobileTimer = window.setTimeout(() => {
+      if (window.innerWidth < 768 && !sessionStorage.getItem("cairn-checklist-dismissed")) {
+        setShowLeadModal(true);
+      }
+    }, 45000);
+    const onLeave = (event: MouseEvent) => {
+      if (
+        armed &&
+        event.clientY <= 0 &&
+        window.innerWidth >= 768 &&
+        !sessionStorage.getItem("cairn-checklist-dismissed")
+      ) {
+        setShowLeadModal(true);
+      }
+    };
+    document.addEventListener("mouseleave", onLeave);
+    return () => {
+      window.clearTimeout(armTimer);
+      window.clearTimeout(mobileTimer);
+      document.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  const visiblePrice = useMemo(() => localized.price, [localized.price]);
+
+  const submitLead = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!email.trim()) return;
+    toast.success("Checklist request captured in this mockup", {
+      description: "Connect the production form to the approved email platform before launch.",
+    });
+    setEmail("");
+    setShowLeadModal(false);
+    sessionStorage.setItem("cairn-checklist-dismissed", "1");
+  };
+
+  const dismissLead = () => {
+    setShowLeadModal(false);
+    sessionStorage.setItem("cairn-checklist-dismissed", "1");
+  };
+
+  return (
+    <div className="site-shell">
+      <div className="deadline-bar">
+        <div className="container deadline-inner">
+          <span><CalendarDays /> Pre-order price ends October 31</span>
+          <span className="deadline-detail">Expected delivery October 21 · 30-day refund window</span>
+        </div>
+      </div>
+
+      <header className="site-header">
+        <div className="container header-inner">
+          <a href="#top" className="wordmark" aria-label="CairnCareers home">
+            <CairnMark />
+            <span><strong>Cairn</strong><small>Careers</small></span>
+          </a>
+          <nav className="desktop-nav" aria-label="Primary navigation">
+            <a href="#how-it-works">How it works</a>
+            <a href="#dashboard-preview">Product preview</a>
+            <a href="#proof">Proof plan</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#about">About</a>
+          </nav>
+          <div className="header-controls">
+            <label className="compact-select">
+              <Globe2 aria-hidden="true" />
+              <span className="sr-only">Country and currency</span>
+              <select
+                value={locale}
+                onChange={(event) => {
+                  setLocale(event.target.value as LocaleKey);
+                  toast.message(`Locale preview: ${localeOptions[event.target.value as LocaleKey].label}`);
+                }}
+              >
+                {Object.entries(localeOptions).map(([key, option]) => (
+                  <option key={key} value={key}>{option.short}</option>
+                ))}
+              </select>
+              <ChevronDown aria-hidden="true" />
+            </label>
+            <button className="menu-button" onClick={() => setMobileOpen((value) => !value)} aria-label="Toggle navigation">
+              {mobileOpen ? <X /> : <Menu />}
+            </button>
+          </div>
+        </div>
+        {mobileOpen && (
+          <nav className="mobile-nav container" aria-label="Mobile navigation">
+            <a onClick={() => setMobileOpen(false)} href="#how-it-works">How it works</a>
+            <a onClick={() => setMobileOpen(false)} href="#dashboard-preview">Product preview</a>
+            <a onClick={() => setMobileOpen(false)} href="#proof">Proof plan</a>
+            <a onClick={() => setMobileOpen(false)} href="#pricing">Pricing</a>
+            <a onClick={() => setMobileOpen(false)} href="#about">About</a>
+          </nav>
+        )}
+      </header>
+
+      <main id="top">
+        <section className="hero-section">
+          <div className="container campaign-preview">
+            <span>Message preview</span>
+            <div role="group" aria-label="Preview acquisition-source message">
+              {(Object.keys(campaignVariants) as CampaignKey[]).map((key) => (
+                <button key={key} onClick={() => setCampaign(key)} className={campaign === key ? "active" : ""}>
+                  {campaignVariants[key].label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="container hero-grid">
+            <div className="hero-copy">
+              <div className="hero-eyebrow">{message.eyebrow}</div>
+              <h1>Find an entry-level path that holds up to AI.</h1>
+              <p>{message.body}</p>
+              <div className="hero-actions">
+                <a className="primary-cta" href="#pricing">Show me my career paths <ArrowRight /></a>
+                <a className="tour-link" href={DASHBOARD_PREVIEW_URL}>Explore the sample dashboard <ArrowRight /></a>
+              </div>
+              <div className="purchase-context">
+                <div><strong>{visiblePrice}</strong><span>{localized.note}</span></div>
+                <div><strong>Ends Oct. 31</strong><span>Full refund if the ship date is missed</span></div>
+              </div>
+            </div>
+            <div className="hero-visual" aria-label="Career route from self-knowledge to an evidence-supported next move">
+              <img src={ASSETS.hero} alt="Abstract route map with three career-planning waypoints" width="1200" height="675" fetchPriority="high" />
+              <div className="hero-route-card">
+                <span className="route-card-kicker">A steadier way forward</span>
+                <strong>Three signals. One next move.</strong>
+                <ol>
+                  <li><span>1</span> What you know</li>
+                  <li><span>2</span> Market context</li>
+                  <li><span>3</span> A route to test</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="trust-strip" aria-label="Trust and risk reversal">
+          <div className="container trust-strip-grid">
+            <div><ShieldCheck /><span><strong>Full refund</strong> if CairnCareers misses October 21</span></div>
+            <div><LockKeyhole /><span><strong>Secure checkout</strong> handled by Stripe</span></div>
+            <div><Globe2 /><span><strong>USD labeled</strong> before checkout in every locale</span></div>
+          </div>
+        </section>
+
+        <section id="how-it-works" className="paper-section route-section">
+          <div className="container">
+            <div className="section-heading split-heading">
+              <div>
+                <SectionLabel number="01">The route</SectionLabel>
+                <h2>Career planning that ends with a first move.</h2>
+              </div>
+              <p>Your map should make the next decision smaller, more specific, and easier to test in the real world.</p>
+            </div>
+            <div className="steps-grid">
+              {steps.map(([number, title, body]) => (
+                <article key={number} className="step-card">
+                  <span className="step-number">{number}</span>
+                  <h3>{title}</h3>
+                  <p>{body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="tour" className="ink-section tour-section">
+          <div className="container tour-grid">
+            <div>
+              <SectionLabel number="02">Look before you decide</SectionLabel>
+              <h2>See the work, not just the promise.</h2>
+              <p>The product tour shows where salary, job growth, AI exposure, resume reframes, and networking routes live before you pre-order.</p>
+              <a href={DASHBOARD_PREVIEW_URL} className="outline-link">Open the sample dashboard <ArrowRight /></a>
+            </div>
+            <div id="tour-preview" className="dashboard-preview" aria-label="Illustrative CairnCareers dashboard preview">
+              <div className="preview-top"><span>YOUR FIRST-MOVE MAP</span><span>Coverage 72%</span></div>
+              <div className="preview-grid">
+                <div className="preview-score"><span>AI exposure</span><strong>42</strong><small>moderate</small></div>
+                <div className="preview-chart"><i></i><i></i><i></i><i></i><i></i></div>
+                <div className="preview-list"><span>Durable task</span><span>Build stakeholder context</span><span>Next conversation</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="dashboard-preview" className="dashboard-bridge-section">
+          <div className="container">
+            <div className="dashboard-bridge-heading">
+              <div>
+                <SectionLabel number="03">The sample workspace</SectionLabel>
+                <h2>Open the dashboard. Then follow every card.</h2>
+              </div>
+              <div className="dashboard-bridge-action">
+                <p>The public preview is filled with invented data for Maya Rivera. It shows the actual shape of Premium without asking for an account.</p>
+                <a className="primary-cta dashboard-entry" href={DASHBOARD_PREVIEW_URL}>
+                  <LayoutDashboard /> Open sample dashboard <ArrowRight />
+                </a>
+                <span><ExternalLink /> Opens the public CairnCareers preview</span>
+              </div>
+            </div>
+
+            <div className="module-route-grid" aria-label="Sample dashboard areas">
+              {dashboardAreas.map((area) => (
+                <a key={area.title} className={`module-route-card ${area.accent}`} href={area.href}>
+                  <div className="module-route-top"><span>{area.number}</span><ExternalLink aria-hidden="true" /></div>
+                  <h3>{area.title}</h3>
+                  <p>{area.body}</p>
+                  <span className="module-route-link">Open {area.title} <ArrowRight /></span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="proof" className="paper-section proof-section">
+          <div className="container">
+            <div className="section-heading split-heading">
+              <div>
+                <SectionLabel number="04">Permissioned proof queue</SectionLabel>
+                <h2>Build proof without pretending it already exists.</h2>
+              </div>
+              <p>Every slot below stays visibly unpublished until a real student grants permission and the result can be verified.</p>
+            </div>
+
+            <div className="outcomes-panel">
+              <div className="outcomes-map-bg" aria-hidden="true"><i /><i /><i /></div>
+              <div className="outcomes-content">
+                <div className="outcomes-heading">
+                  <span className="slot-badge">Verified outcomes · reserved</span>
+                  <h3>Publish only what can be sourced.</h3>
+                </div>
+                <div className="metrics-grid">
+                  <MetricSlot label="Students mapped" />
+                  <MetricSlot label="Next moves completed" />
+                  <MetricSlot label="Time to first useful route" />
+                </div>
+              </div>
+            </div>
+
+            <div className="story-grid">
+              <ProofPhotoSlot index={1} />
+              <ProofPhotoSlot index={2} />
+              <ProofPhotoSlot index={3} />
+            </div>
+
+            <div className="video-rating-grid">
+              <article className="video-slot">
+                <div className="video-art">
+                  <div className="video-illustration" aria-label="Illustrative empty interview set reserved for a future permissioned student video">
+                    <div className="studio-light" />
+                    <div className="empty-chair"><i /><i /><i /></div>
+                    <div className="microphone"><i /></div>
+                    <div className="studio-route"><i /><i /><i /></div>
+                  </div>
+                  <CirclePlay aria-hidden="true" />
+                </div>
+                <div>
+                  <span className="slot-badge">Permissioned video story · reserved</span>
+                  <h3>Before, after, and the verified result between.</h3>
+                  <p>Required: a real student, explicit consent, and one measurable change worth showing.</p>
+                </div>
+              </article>
+              <article className="rating-slot">
+                <div className="rating-mark">★ — / 5</div>
+                <span className="slot-badge">Third-party rating · reserved</span>
+                <h3>Connect one verified review profile.</h3>
+                <p>Use G2, Capterra, Trustpilot, Product Hunt, App Store, or an equivalent source only after the profile and rating are live.</p>
+                <div className="source-placeholder">Verified source URL required <ArrowRight /></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section className="checklist-section">
+          <div className="container checklist-grid">
+            <div className="checklist-art">
+              <div className="field-guide-art" aria-label="Illustrated career-planning field guide">
+                <div className="guide-cover"><CairnMark /><span>First-job field guide</span><strong>7 QUESTIONS</strong></div>
+                <div className="guide-page"><span>01</span><i /><span>02</span><i /><span>03</span><i /></div>
+                <div className="guide-route"><i /><i /><i /></div>
+              </div>
+            </div>
+            <div className="checklist-copy">
+              <SectionLabel number="05">Useful even if you do not pre-order</SectionLabel>
+              <h2>Get the First-Job AI Readiness Checklist.</h2>
+              <p>Seven questions to separate durable work from automatable tasks before your next adviser or recruiter conversation.</p>
+              <form className="email-form" onSubmit={submitLead}>
+                <label htmlFor="checklist-email">Email address</label>
+                <div>
+                  <Mail aria-hidden="true" />
+                  <input id="checklist-email" type="email" required placeholder="you@school.edu" value={email} onChange={(event) => setEmail(event.target.value)} />
+                  <button type="submit">Send me my checklist <ArrowRight /></button>
+                </div>
+                <small>One useful resource, then occasional product updates. Unsubscribe anytime.</small>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section id="pricing" className="pricing-section">
+          <div className="container">
+            <div className="section-heading split-heading">
+              <div>
+                <SectionLabel number="06">Pricing</SectionLabel>
+                <h2>See the price before checkout.</h2>
+              </div>
+              <div className="locale-disclosure">
+                <Globe2 />
+                <div><strong>{localized.label}</strong><span>{localized.note}</span></div>
+              </div>
+            </div>
+
+            <div className="pricing-grid">
+              <article className="price-card">
+                <span className="price-for">Where do I stand?</span>
+                <h3>Free</h3>
+                <div className="price"><strong>$0</strong><span>forever</span></div>
+                <ul><li><Check /> AI-exposure score</li><li><Check /> Durable-versus-exposed task map</li><li><Check /> Median salary context</li></ul>
+              </article>
+              <article className="price-card">
+                <span className="price-for">How do I get there?</span>
+                <h3>Pro</h3>
+                <div className="price"><strong>US$49</strong><span>USD / year</span></div>
+                <ul><li><Check /> Everything in Free</li><li><Check /> Resume reframes</li><li><Check /> Monthly re-runs</li></ul>
+              </article>
+              <article className="price-card featured-price">
+                <div className="price-ribbon">Pre-order · 66% savings</div>
+                <span className="price-for">Know my first move</span>
+                <h3>Premium</h3>
+                <div className="price"><s>US$89</s><strong>{visiblePrice}</strong><span>{localized.note}</span></div>
+                <ul><li><Check /> Everything in Pro</li><li><Check /> Living resume + LinkedIn system</li><li><Check /> Warm-path networking engine</li><li><Check /> Graduation-timeline roadmap</li></ul>
+                <a className="primary-cta full-cta" href="#checkout-note">Show me my career paths <ArrowRight /></a>
+                <div id="checkout-note" className="checkout-note"><LockKeyhole /> Pre-order pricing ends October 31. Checkout charges US$30 USD.</div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="about" className="about-section">
+          <div className="container about-grid">
+            <div>
+              <SectionLabel number="07">Why this exists</SectionLabel>
+              <h2>A guide should be honest about what it knows.</h2>
+              <article className="founder-card">
+                <img src={ASSETS.founder} alt="Brooke Houck, PhD, founder of CairnCareers" width="300" height="300" loading="lazy" decoding="async" />
+                <div><span className="slot-badge">Built by a PhD research scientist</span><h3>Brooke Houck, PhD · Founder</h3><p>“Students deserve the same non-answers about AI and work that everyone else does: clickbait or a shrug. CairnCareers uses research standards you can read about openly.”</p></div>
+              </article>
+            </div>
+            <div className="trust-file">
+              <span className="slot-badge amber">Trust file · what is committed</span>
+              <div><FileCheck2 /><p><strong>Named public sources</strong><span>O*NET, peer-reviewed AI-exposure research, METR, and BLS context.</span></p></div>
+              <div><ShieldCheck /><p><strong>Privacy before intake</strong><span>Retention terms and consent flow publish before student data is collected.</span></p></div>
+              <div><Globe2 /><p><strong>Localization after demand</strong><span>Pilot routes stay explicit; translation expands only when support demand justifies it.</span></p></div>
+            </div>
+          </div>
+        </section>
+
+        <section className="closing-section">
+          <div className="container closing-inner">
+            <span className="hero-eyebrow">The next marker is yours</span>
+            <h2>Find my first move before pre-order pricing ends.</h2>
+            <a className="primary-cta" href="#pricing">Show me my career paths <ArrowRight /></a>
+            <p>Ends October 31 · {localized.note} · 30-day refund window after delivery</p>
+          </div>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <div className="container footer-grid">
+          <div className="wordmark footer-mark"><CairnMark /><span><strong>Cairn</strong><small>Careers</small></span></div>
+          <p>Career context for college students and recent graduates.</p>
+          <div><a href="mailto:contact@cairncareers.com">contact@cairncareers.com</a><span>Privacy · Terms · Refunds</span></div>
+        </div>
+      </footer>
+
+      {showLeadTab && (
+        <button className="lead-tab" onClick={() => setShowLeadModal(true)}><Sparkles /> Free checklist</button>
+      )}
+
+      {showLeadModal && (
+        <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) dismissLead(); }}>
+          <div className="lead-modal" role="dialog" aria-modal="true" aria-labelledby="lead-modal-title">
+            <button className="modal-close" onClick={dismissLead} aria-label="Close checklist offer"><X /></button>
+            <span className="slot-badge">A useful exit, not a hard sell</span>
+            <h2 id="lead-modal-title">Not ready to pre-order?</h2>
+            <p>Take the seven-question First-Job AI Readiness Checklist into your next career conversation.</p>
+            <form className="email-form modal-form" onSubmit={submitLead}>
+              <label htmlFor="modal-email">Email address</label>
+              <div><Mail /><input id="modal-email" type="email" required placeholder="you@school.edu" value={email} onChange={(event) => setEmail(event.target.value)} /></div>
+              <button type="submit" className="primary-cta">Send me my checklist <ArrowRight /></button>
+              <small>Email only. One resource, then occasional product updates.</small>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
