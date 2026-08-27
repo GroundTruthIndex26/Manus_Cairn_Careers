@@ -13,11 +13,13 @@ const canonicalDashboardBrandCss = `<style id="cairn-canonical-brand">
 const backToTopMarkup = `<button class="btn totop" id="totop" aria-label="Back to top">&#9650;</button><script>(function(){var b=document.getElementById("totop");if(!b)return;b.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})});function u(){b.classList.toggle("show",window.scrollY>300)}window.addEventListener("scroll",u,{passive:true});u()})();</script>`;
 
 const smoothRoadmapCss = `<style id="cairn-smooth-roadmap">
-#drive .car{will-change:left,transform;transform-origin:72% 100%}
-#drive.go .car{animation:cairn-smooth-drive 8.4s cubic-bezier(.2,.72,.22,1) both!important}
-#drive.go .smoke{animation:cairn-rear-smoke 8.4s ease-out both!important}
-@keyframes cairn-smooth-drive{0%{left:-18%;transform:translateY(0) rotate(0)}26%{left:13%;transform:translateY(0) rotate(0)}52%{left:43%;transform:translateY(0) rotate(0)}74%{left:69%;transform:translateY(0) rotate(0)}87%{left:84%;transform:translateY(0) rotate(0)}92%{left:89%;transform:translateY(-13px) rotate(-13deg)}95%{left:90%;transform:translateY(-14px) rotate(-13deg)}100%{left:90%;transform:translateY(0) rotate(0)}}
-@keyframes cairn-rear-smoke{0%,88%{opacity:0;transform:translate(0,0) scale(.3)}91%{opacity:.9;transform:translate(-8px,-4px) scale(.8)}95%{opacity:.55;transform:translate(-22px,-18px) scale(1.35)}100%{opacity:0;transform:translate(-34px,-28px) scale(1.6)}}
+	#drive .car{will-change:left,transform;transform-origin:24% 74%}
+	#drive.go .car{animation:cairn-smooth-drive 8.2s cubic-bezier(.16,.72,.25,1) forwards!important}
+	#drive.go::before{animation:cairn-rear-smoke 8.2s linear forwards!important}
+	#drive.go .wheel{animation:cairn-wheel-roll .5s linear 15 forwards!important}
+	@keyframes cairn-smooth-drive{0%{left:-170px;transform:translateY(0) rotate(0)}30%{left:3%;transform:translateY(0) rotate(0)}56%{left:27%;transform:translateY(0) rotate(0)}76%{left:56%;transform:translateY(0) rotate(0)}87%{left:72%;transform:translateY(0) rotate(0)}91%{left:calc(100% - 188px);transform:translateY(0) rotate(0)}94%{left:calc(100% - 188px);transform:translateY(-13px) rotate(-15deg)}97%{left:calc(100% - 188px);transform:translateY(-13px) rotate(-15deg)}100%{left:calc(100% - 188px);transform:translateY(0) rotate(0)}}
+	@keyframes cairn-rear-smoke{0%,90%{left:-96px;opacity:0;transform:scale(.3) translateY(10px)}93%{left:calc(100% - 170px);opacity:.9;transform:scale(.75) translateY(0)}96%{left:calc(100% - 184px);opacity:.65;transform:scale(1.22) translateY(-12px)}100%{left:calc(100% - 202px);opacity:0;transform:scale(1.55) translateY(-25px)}}
+	@keyframes cairn-wheel-roll{to{transform:rotate(5400deg)}}
 </style>`;
 
 const interviewRepairCss = `/* Interview answer: semantic source with readable landmarks. */
@@ -51,9 +53,11 @@ for (const fileName of readdirSync(dashboardDir)) {
   html = html
     .replace(/<a([^>]*?)href="[^"]*"([^>]*)>\s*Dashboard\s*<\/a>/gi, '<a$1href="../#dashboard-preview"$2>Dashboard</a>')
     .replace(/<div style="padding:0 0 44px"><a class="btn" href="[^"]*">Back to all nine areas<\/a><\/div>/gi, '')
-    .replaceAll('href="https://cairncareers.com/privacy"', 'href="https://privacy.cairncareers.com"')
-    .replaceAll('href="https://cairncareers.com/terms"', 'href="https://terms.cairncareers.com"')
-    .replaceAll('href="https://cairncareers.com/refunds"', 'href="https://refunds.cairncareers.com"');
+    .replaceAll('href="https://privacy.cairncareers.com"', 'href="https://cairncareers.com/privacy"')
+    .replaceAll('href="https://terms.cairncareers.com"', 'href="https://cairncareers.com/terms"')
+    .replaceAll('href="https://refunds.cairncareers.com"', 'href="https://cairncareers.com/refunds"');
+
+  html = html.replace(/<div[^>]*>\s*<a[^>]*>\s*(?:Back|Return)\s+to\s+(?:all\s+)?(?:the\s+)?(?:nine\s+(?:areas|cards)|dashboard\s+cards)\s*<\/a>\s*<\/div>/gi, '');
 
   html = html.replace(/<span class="mark"([^>]*)><svg[^>]*>[\s\S]*?<\/svg><\/span>/g, '<span class="mark"$1><img src="../brand/cairn-icon.svg" width="36" height="36" alt="" aria-hidden="true"></span>');
 
@@ -83,9 +87,8 @@ for (const fileName of readdirSync(dashboardDir)) {
   }
 
   if (fileName === "roadmap.html") {
-    if (!html.includes('cairn-smooth-roadmap')) {
-      html = html.replace("</head>", `${smoothRoadmapCss}</head>`);
-    }
+    html = html.replace(/<style id="cairn-smooth-roadmap">[\s\S]*?<\/style>/, smoothRoadmapCss);
+    if (!html.includes('cairn-smooth-roadmap')) html = html.replace("</head>", `${smoothRoadmapCss}</head>`);
     html = html.replace('if(e.isIntersecting){r.classList.add("go")}else{r.classList.remove("go")}', 'if(e.isIntersecting){r.classList.add("go");io.unobserve(r)}');
   }
 

@@ -110,8 +110,6 @@ const steps = [
   ["03", "Leave with a route", "A practical LinkedIn, networking, and first-conversation direction."],
 ];
 
-const DASHBOARD_PREVIEW_URL = `${BASE_URL}dashboard-preview/index.html`;
-
 const dashboardAreas = [
   {
     number: "01",
@@ -357,7 +355,7 @@ export default function Home() {
           </a>
           <nav className="desktop-nav" aria-label="Primary navigation">
             <a href="#how-it-works">How it works</a>
-            <a href="#dashboard-preview">Product preview</a>
+            <a href="#dashboard-preview">Sample Dashboard</a>
             <a href="#proof">Proof</a>
             <a href="#pricing">Pricing</a>
             <a href="#about">About</a>
@@ -388,7 +386,7 @@ export default function Home() {
         {mobileOpen && (
           <nav className="mobile-nav container" aria-label="Mobile navigation">
             <a onClick={() => setMobileOpen(false)} href="#how-it-works">How it works</a>
-            <a onClick={() => setMobileOpen(false)} href="#dashboard-preview">Product preview</a>
+            <a onClick={() => setMobileOpen(false)} href="#dashboard-preview">Sample Dashboard</a>
             <a onClick={() => setMobileOpen(false)} href="#proof">Proof</a>
             <a onClick={() => setMobileOpen(false)} href="#pricing">Pricing</a>
             <a onClick={() => setMobileOpen(false)} href="#about">About</a>
@@ -455,12 +453,12 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="tour" className="ink-section tour-section">
+        <section id="dashboard-preview" className="ink-section tour-section">
           <div className="container tour-grid">
             <div>
-              <SectionLabel number="02">Look before you decide</SectionLabel>
-              <h2>See the work, not just the promise.</h2>
-              <p>The product tour shows where salary, job growth, AI exposure, resume reframes, and networking routes live before you pre-order.</p>
+              <SectionLabel number="03">See the Sample Dashboard</SectionLabel>
+              <h2>See the Sample Dashboard before you decide.</h2>
+              <p>See where salary, job growth, AI exposure, resume reframes, and networking routes live before you pre-order.</p>
             </div>
             <div id="tour-preview" className="dashboard-preview" aria-label="Illustrative CairnCareers dashboard preview">
               <div className="preview-top"><span>YOUR FIRST-MOVE MAP</span><span>Coverage 72%</span></div>
@@ -473,19 +471,19 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="dashboard-preview" className="dashboard-bridge-section">
+        <section className="dashboard-bridge-section">
           <div className="container">
             <div className="dashboard-bridge-heading">
               <div>
-                <SectionLabel number="03">The sample workspace</SectionLabel>
-                <h2>Open the dashboard. Then follow every card.</h2>
+                <SectionLabel number="03">See the Sample Dashboard</SectionLabel>
+                <h2>Explore every part of the Sample Dashboard.</h2>
               </div>
               <div className="dashboard-bridge-action">
-                <p>The public preview is filled with invented data for Maya Rivera. It shows the actual shape of Premium without asking for an account.</p>
+                <p>The Sample Dashboard is filled with invented data for Maya Rivera. Each card opens the full page for that area without asking for an account.</p>
               </div>
             </div>
 
-            <div className="module-route-grid" aria-label="Sample dashboard areas">
+            <div className="module-route-grid" aria-label="Sample Dashboard pages">
               {dashboardAreas.map((area) => (
                 <a key={area.title} className={`module-route-card ${area.accent}`} href={area.href}>
                   <div className="module-route-top"><span>{area.number}</span><ExternalLink aria-hidden="true" /></div>
@@ -636,7 +634,7 @@ export default function Home() {
       <footer className="site-footer">
         <div className="container footer-grid">
           <div className="footer-brand-block"><div className="wordmark footer-mark"><CairnMark /><span><strong>Cairn</strong><small>Careers</small></span></div><p>Career context for college students and recent graduates.</p><p className="footer-product-line">Cairn Careers is a product of <a href="https://phronesislabs.net" target="_blank" rel="noreferrer">Phronesis Labs, LLC</a>.</p></div>
-          <div className="footer-links"><a href="mailto:contact@cairncareers.com">contact@cairncareers.com</a><span><a href="https://privacy.cairncareers.com">Privacy</a> · <a href="https://terms.cairncareers.com">Terms</a> · <a href="https://refunds.cairncareers.com">Refunds</a></span></div>
+          <div className="footer-links"><a href="mailto:contact@cairncareers.com">contact@cairncareers.com</a><span><a href="https://cairncareers.com/privacy">Privacy</a> · <a href="https://cairncareers.com/terms">Terms</a> · <a href="https://cairncareers.com/refunds">Refunds</a></span></div>
         </div>
       </footer>
 
