@@ -127,20 +127,33 @@ sup a{color:inherit; font-weight:700; text-decoration:none; border-bottom:2px so
 .toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(14px); background:var(--ink); color:var(--lime); border:3px solid var(--lime); font-family:"Space Mono",monospace; font-size:.74rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:11px 18px; opacity:0; pointer-events:none; transition:.2s; z-index:80}
 .toast.on{opacity:1; transform:translateX(-50%) translateY(0)}
 
-/* Roadmap: the drive to your first job. The car runs once each time it scrolls into view:
-   pulls away slowly, opens up midway, and pops a wheelie near the end. */
-.road{position:relative;height:104px;overflow:hidden}
-.roadlabel{position:absolute;top:6px;left:2px;color:#3a3a3a;font-family:"Space Mono",monospace;font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
-.car{position:absolute;bottom:2px;left:-170px;width:156px;transform-origin:78% 85%}
+/* Roadmap: the drive stays on the route. The wheelie pivots over the rear tire,
+   then settles back onto the line before the car moves on. */
+.road{position:relative;height:122px;overflow:hidden;isolation:isolate}
+.road::after{content:"";position:absolute;z-index:1;left:0;right:0;bottom:17px;height:8px;border:2px solid var(--ink);border-radius:999px;background:linear-gradient(90deg,var(--cyan) 0 42%,var(--lime) 42% 72%,var(--magenta) 72% 100%);box-shadow:4px 4px 0 var(--ink)}
+.road::before{content:"";position:absolute;z-index:2;left:-96px;bottom:19px;width:62px;height:38px;opacity:0;background:radial-gradient(circle at 13px 26px,rgba(255,255,255,.96) 0 5px,transparent 6px),radial-gradient(circle at 26px 16px,rgba(255,255,255,.9) 0 8px,transparent 9px),radial-gradient(circle at 42px 25px,rgba(255,255,255,.84) 0 6px,transparent 7px),radial-gradient(circle at 53px 10px,rgba(255,255,255,.72) 0 4px,transparent 5px);filter:drop-shadow(2px 2px 0 rgba(11,11,11,.24))}
+.roadlabel{position:absolute;z-index:4;top:6px;left:2px;color:#3a3a3a;font-family:"Space Mono",monospace;font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.car{position:absolute;z-index:3;bottom:2px;left:-170px;width:156px;transform-origin:24% 74%}
 .road.go .car{animation:drive 6.5s linear forwards}
+.road.go::before{animation:rear-smoke 6.5s linear forwards}
 @keyframes drive{
   0%{left:-170px;transform:rotate(0deg)}
   42%{left:13%;transform:rotate(0deg)}
   63%{left:44%;transform:rotate(0deg)}
-  74%{left:62%;transform:rotate(-5deg)}
-  85%{left:79%;transform:rotate(-17deg)}
-  94%{left:93%;transform:rotate(-21deg)}
-  100%{left:103%;transform:rotate(-12deg)}
+  70%{left:57%;transform:rotate(0deg)}
+  77%{left:68%;transform:rotate(-12deg)}
+  85%{left:73%;transform:rotate(-18deg)}
+  92%{left:calc(100% - 292px);transform:rotate(-8deg)}
+  96%{left:calc(100% - 226px);transform:rotate(0deg)}
+  100%{left:calc(100% - 160px);transform:rotate(0deg)}
+}
+@keyframes rear-smoke{
+  0%,68%{left:-96px;opacity:0;transform:scale(.3) translateY(10px)}
+  70%{left:calc(57% - 22px);opacity:.75;transform:scale(.45) translateY(8px)}
+  77%{left:calc(68% - 22px);opacity:.95;transform:scale(.8) translateY(0)}
+  85%{left:calc(73% - 22px);opacity:.9;transform:scale(1.05) translateY(-7px)}
+  92%{left:calc(100% - 314px);opacity:.55;transform:scale(1.3) translateY(-14px)}
+  100%{left:calc(100% - 182px);opacity:0;transform:scale(1.65) translateY(-24px)}
 }
 .wheel{transform-box:fill-box;transform-origin:center}
 .road.go .wheel{animation:spin .5s linear infinite}
@@ -148,8 +161,23 @@ sup a{color:inherit; font-weight:700; text-decoration:none; border-bottom:2px so
 .termhead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
 .termhead .mono-sub{font-family:"Space Mono",monospace;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3a3a3a}
 .mon .eyebrow{display:inline-block;border-bottom:3px solid var(--magenta);padding-bottom:4px}
+.stack > .sec:has(.termhead){position:relative;gap:18px;margin:0 -20px;padding:24px 24px 28px 58px;border-block:2px solid var(--ink);background:rgba(255,255,255,.48)}
+.stack > .sec:has(.termhead)::before{content:"";position:absolute;z-index:-1;top:-2px;bottom:-2px;left:22px;width:10px;border-inline:2px solid var(--ink);background:var(--cyan)}
+.stack > .sec:has(.termhead)::after{content:"";position:absolute;top:28px;left:13px;width:28px;height:28px;border:3px solid var(--ink);border-radius:50%;background:var(--lime);box-shadow:3px 3px 0 var(--ink)}
+.stack > .sec:nth-child(7):has(.termhead){background:rgba(31,227,227,.14)}
+.stack > .sec:nth-child(9):has(.termhead){background:rgba(255,61,139,.10)}
+.stack > .sec:has(.termhead) .g.g4 > .mon{position:relative}
+.stack > .sec:has(.termhead) .g.g4 > .mon:first-child{border-top:8px solid var(--lime)}
+.stack > .sec:has(.termhead) .g.g4 > .mon:last-child{border-top:8px solid var(--magenta)}
+.stack > .sec:has(.termhead) .g.g4 > .mon:first-child::before,.stack > .sec:has(.termhead) .g.g4 > .mon:last-child::before{position:absolute;right:12px;top:-26px;border:2px solid var(--ink);padding:3px 6px;background:var(--amber);font-family:"Space Mono",monospace;font-size:.54rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;box-shadow:2px 2px 0 var(--ink)}
+.stack > .sec:has(.termhead) .g.g4 > .mon:first-child::before{content:"Start"}
+.stack > .sec:has(.termhead) .g.g4 > .mon:last-child::before{content:"Milestone"}
+.stack > .sec:has(.termhead) + .sec .breakband{position:relative;margin-left:38px;border:3px dashed var(--ink);border-left:10px solid var(--cyan);background:var(--paper2);padding:16px 20px}
+.stack > .sec:has(.termhead) + .sec .breakband::before{content:"";position:absolute;top:50%;left:-49px;width:42px;border-top:4px solid var(--cyan)}
+.stack > .sec:nth-child(7):has(.termhead) + .sec .breakband{background:var(--lime);border-left-color:var(--magenta)}
+.stack > .sec:nth-child(7):has(.termhead) + .sec .breakband::before{border-top-color:var(--magenta)}
 .breakband{border:3px dashed var(--ink);background:var(--paper2);padding:16px 20px}
-@media (prefers-reduced-motion:reduce){.car,.wheel,.road.go .car,.road.go .wheel{animation:none !important}.car{left:12%}}
+@media (prefers-reduced-motion:reduce){.car,.wheel,.road.go .car,.road.go .wheel,.road.go::before{animation:none !important}.car{left:12%}.road::before{display:none}}
 
 /* One button pattern sitewide plus the floating up arrow */
 .btn.ghost{background:var(--lime)}
@@ -170,6 +198,19 @@ sup a{color:inherit; font-weight:700; text-decoration:none; border-bottom:2px so
   .hdr .right{gap:7px}
   .hdr .right .btn{padding:8px 8px}
   .hdr .chip{padding:5px 6px;letter-spacing:.06em}
+  .road{height:112px}
+  .car{width:128px}
+  @keyframes drive{
+    0%{left:-140px;transform:rotate(0deg)}
+    42%{left:8%;transform:rotate(0deg)}
+    63%{left:29%;transform:rotate(0deg)}
+    70%{left:39%;transform:rotate(0deg)}
+    77%{left:48%;transform:rotate(-12deg)}
+    85%{left:54%;transform:rotate(-18deg)}
+    92%{left:60%;transform:rotate(-8deg)}
+    96%{left:calc(100% - 158px);transform:rotate(0deg)}
+    100%{left:calc(100% - 130px);transform:rotate(0deg)}
+  }
 }
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}
 </style></head><body><header class="hdr"><div class="hdr-in"><a class="brand" href="https://cairncareers.com/#pricing" aria-label="CairnCareers pricing"><span class="mark"><svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><g fill="#c7f94b"><ellipse cx="20" cy="29" rx="12" ry="4"/><ellipse cx="20" cy="21" rx="8.5" ry="3.5"/><ellipse cx="20" cy="15" rx="5.6" ry="2.8"/><ellipse cx="20" cy="10" rx="3.3" ry="2"/></g></svg></span><span class="nm"><b>Cairn</b><span>Careers</span></span></a><nav aria-label="Dashboard sections"><a href="evidence.html">Evidence</a><a href="portfolio.html">Portfolio</a><a href="resume.html">Resume</a><a href="linkedin.html">LinkedIn</a><a href="network.html">Network</a><a href="interview.html">Interview</a><a href="careers.html">Careers</a><a href="roadmap.html" class="on">Roadmap</a><a href="cleanup.html">Clean-up</a></nav><div class="right"><a class="btn" href="index.html" style="padding:8px 12px;font-size:.62rem">Dashboard</a><a class="chip" href="https://cairncareers.com/#preorder-checkout" style="text-decoration:none">Preorder now</a></div></div></header><div class="wrap"><div class="stack"><div><span class="eyebrow chipbrow">Sequenced to your start line</span><h1 class="t">Twelve months, mapped so the biggest gaps close first.</h1><p class="lede">This is not a list of good ideas. Each month is tied to a specific gap on your evidence page, sequenced so the earliest work makes the later work easier, with the breaks between terms doing real jobs of their own. It works the same whether you are still in classes or already out.</p></div><div class="mockbar">Sample dashboard. Every name and number here is invented so you can see how it works.</div><div class="sec"><div class="road" id="drive"><span class="roadlabel">The drive to your first job, Sep 2026 to Dec 2027</span><svg class="car" viewBox="0 0 240 92" aria-hidden="true"><g>
