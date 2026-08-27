@@ -12,6 +12,14 @@ const canonicalDashboardBrandCss = `<style id="cairn-canonical-brand">
 
 const backToTopMarkup = `<button class="btn totop" id="totop" aria-label="Back to top">&#9650;</button><script>(function(){var b=document.getElementById("totop");if(!b)return;b.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})});function u(){b.classList.toggle("show",window.scrollY>300)}window.addEventListener("scroll",u,{passive:true});u()})();</script>`;
 
+const smoothRoadmapCss = `<style id="cairn-smooth-roadmap">
+#drive .car{will-change:left,transform;transform-origin:72% 100%}
+#drive.go .car{animation:cairn-smooth-drive 8.4s cubic-bezier(.2,.72,.22,1) both!important}
+#drive.go .smoke{animation:cairn-rear-smoke 8.4s ease-out both!important}
+@keyframes cairn-smooth-drive{0%{left:-18%;transform:translateY(0) rotate(0)}26%{left:13%;transform:translateY(0) rotate(0)}52%{left:43%;transform:translateY(0) rotate(0)}74%{left:69%;transform:translateY(0) rotate(0)}87%{left:84%;transform:translateY(0) rotate(0)}92%{left:89%;transform:translateY(-13px) rotate(-13deg)}95%{left:90%;transform:translateY(-14px) rotate(-13deg)}100%{left:90%;transform:translateY(0) rotate(0)}}
+@keyframes cairn-rear-smoke{0%,88%{opacity:0;transform:translate(0,0) scale(.3)}91%{opacity:.9;transform:translate(-8px,-4px) scale(.8)}95%{opacity:.55;transform:translate(-22px,-18px) scale(1.35)}100%{opacity:0;transform:translate(-34px,-28px) scale(1.6)}}
+</style>`;
+
 const interviewRepairCss = `/* Interview answer: semantic source with readable landmarks. */
 .interview-answer{max-width:820px;margin-inline:auto;padding:28px 32px 34px;background:linear-gradient(135deg,#d9ff67 0%,var(--lime) 60%,#b5e741 100%);box-shadow:9px 9px 0 var(--ink),15px 15px 0 var(--magenta)}
 .interview-answer-header{display:grid;grid-template-columns:1fr auto;gap:10px 18px;align-items:start;padding-bottom:16px;border-bottom:2px solid rgba(11,11,11,.64)}
@@ -40,6 +48,13 @@ for (const fileName of readdirSync(dashboardDir)) {
     .replaceAll('href="index.html#areas"', 'href="../#dashboard-preview"')
     .replaceAll('href="index.html"', 'href="../#dashboard-preview"');
 
+  html = html
+    .replace(/<a([^>]*?)href="[^"]*"([^>]*)>\s*Dashboard\s*<\/a>/gi, '<a$1href="../#dashboard-preview"$2>Dashboard</a>')
+    .replace(/<div style="padding:0 0 44px"><a class="btn" href="[^"]*">Back to all nine areas<\/a><\/div>/gi, '')
+    .replaceAll('href="https://cairncareers.com/privacy"', 'href="https://privacy.cairncareers.com"')
+    .replaceAll('href="https://cairncareers.com/terms"', 'href="https://terms.cairncareers.com"')
+    .replaceAll('href="https://cairncareers.com/refunds"', 'href="https://refunds.cairncareers.com"');
+
   html = html.replace(/<span class="mark"([^>]*)><svg[^>]*>[\s\S]*?<\/svg><\/span>/g, '<span class="mark"$1><img src="../brand/cairn-icon.svg" width="36" height="36" alt="" aria-hidden="true"></span>');
 
   if (!html.includes('cairn-canonical-brand')) {
@@ -65,6 +80,13 @@ for (const fileName of readdirSync(dashboardDir)) {
       .replaceAll("Because the automatable half now costs almost nothing, which means the judgment half is most of what you are paying for. I have been practising that half in public since sophomore year, and I can show you the work.", "Lead with the 12 usability sessions, describe the pattern you surfaced, and land on the 40-to-18 percent task-failure result.")
       .replaceAll("“What happens when the tools get better?”", "“How would you approach an ambiguous usability question for our product team?”")
       .replaceAll("Then my share of the automatable work shrinks again and I move further into framing and deciding. I am tracking that number rather than hoping about it, which is why I can tell you it is about half today.", "Start with the user and the decision at stake, choose the fastest appropriate research method, then show how you would turn the findings into a recommendation.");
+  }
+
+  if (fileName === "roadmap.html") {
+    if (!html.includes('cairn-smooth-roadmap')) {
+      html = html.replace("</head>", `${smoothRoadmapCss}</head>`);
+    }
+    html = html.replace('if(e.isIntersecting){r.classList.add("go")}else{r.classList.remove("go")}', 'if(e.isIntersecting){r.classList.add("go");io.unobserve(r)}');
   }
 
   if (fileName === "cleanup.html") {

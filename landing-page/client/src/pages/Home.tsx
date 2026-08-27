@@ -4,13 +4,13 @@
  */
 import {
   ArrowRight,
+  ArrowUp,
   BarChart3,
   CalendarDays,
   Check,
   ChevronDown,
   CirclePlay,
   ExternalLink,
-  FileCheck2,
   Globe2,
   LayoutDashboard,
   LockKeyhole,
@@ -18,7 +18,6 @@ import {
   Map,
   Menu,
   ShieldCheck,
-  Sparkles,
   UserRound,
   X,
 } from "lucide-react";
@@ -37,8 +36,7 @@ const BRAND_ASSETS = {
   darkLogo: `${BASE_URL}brand/cairn-logo-dark.svg`,
 };
 
-const CHECKLIST_DOWNLOAD_URL = `${BASE_URL}downloads/cairn-first-job-ai-readiness-checklist.pdf`;
-const leadCaptureEndpoint = import.meta.env.VITE_LEAD_CAPTURE_ENDPOINT || "";
+const leadCaptureEndpoint = import.meta.env.VITE_LEAD_CAPTURE_ENDPOINT || "/api/launch-notifications";
 
 type LocaleKey = "en-US" | "en-CA" | "en-GB";
 type CampaignKey = "default" | "campus" | "social";
@@ -233,7 +231,7 @@ export default function Home() {
   const [premiumBilling, setPremiumBilling] = useState<BillingCycle>("annual");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showLeadModal, setShowLeadModal] = useState(false);
-  const [showLeadTab, setShowLeadTab] = useState(false);
+  const [showTopButton, setShowTopButton] = useState(false);
   const [email, setEmail] = useState("");
   const [isLeadSubmitting, setIsLeadSubmitting] = useState(false);
   const localized = localeOptions[locale];
@@ -259,7 +257,7 @@ export default function Home() {
   }, [campaign, locale]);
 
   useEffect(() => {
-    const onScroll = () => setShowLeadTab(window.scrollY > 680);
+    const onScroll = () => setShowTopButton(window.scrollY > 300);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
@@ -304,21 +302,12 @@ export default function Home() {
     });
   };
 
-  const downloadChecklist = () => {
-    const download = document.createElement("a");
-    download.href = CHECKLIST_DOWNLOAD_URL;
-    download.download = "CairnCareers-First-Job-AI-Readiness-Checklist.pdf";
-    document.body.appendChild(download);
-    download.click();
-    download.remove();
-  };
-
   const submitLead = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!email.trim()) return;
     if (!leadCaptureEndpoint) {
       toast.error("Database capture is not configured for this preview", {
-        description: "Add VITE_LEAD_CAPTURE_ENDPOINT before collecting email addresses. You can preview the PDF below.",
+        description: "Add VITE_LEAD_CAPTURE_ENDPOINT before collecting launch-notification signups.",
       });
       return;
     }
@@ -328,12 +317,11 @@ export default function Home() {
       const response = await fetch(leadCaptureEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), source: "first-job-ai-readiness-checklist" }),
+        body: JSON.stringify({ email: email.trim(), source: "launch-notification" }),
       });
       if (!response.ok) throw new Error("Lead capture request failed");
-      downloadChecklist();
-      toast.success("Saved. Your checklist download has started.", {
-        description: "The checklist is downloaded directly and is not emailed.",
+      toast.success("You are on the launch-notification list.", {
+        description: "We will use this email to let you know when CairnCareers is live.",
       });
       setEmail("");
       setShowLeadModal(false);
@@ -375,6 +363,7 @@ export default function Home() {
             <a href="#about">About</a>
           </nav>
           <div className="header-controls">
+            <a className="header-cta" href="#premium-checkout">Show me my career paths <ArrowRight /></a>
             <label className="compact-select">
               <Globe2 aria-hidden="true" />
               <span className="sr-only">Country and currency</span>
@@ -409,24 +398,13 @@ export default function Home() {
 
       <main id="top">
         <section className="hero-section">
-          <div className="container campaign-preview">
-            <span>Message preview</span>
-            <div role="group" aria-label="Preview acquisition-source message">
-              {(Object.keys(campaignVariants) as CampaignKey[]).map((key) => (
-                <button key={key} onClick={() => setCampaign(key)} className={campaign === key ? "active" : ""}>
-                  {campaignVariants[key].label}
-                </button>
-              ))}
-            </div>
-          </div>
           <div className="container hero-grid">
             <div className="hero-copy">
               <div className="hero-eyebrow">{message.eyebrow}</div>
               <h1>Find an entry-level path that holds up to AI.</h1>
               <p>{message.body}</p>
               <div className="hero-actions">
-                <a className="primary-cta" href="#pricing">Show me my career paths <ArrowRight /></a>
-                <a className="tour-link" href={DASHBOARD_PREVIEW_URL}>Explore the sample dashboard <ArrowRight /></a>
+                <a className="primary-cta" href="#premium-checkout">Show me my career paths <ArrowRight /></a>
               </div>
               <div className="purchase-context">
                 <div><strong>{visiblePrice}</strong><span>{localized.note}</span></div>
@@ -483,7 +461,6 @@ export default function Home() {
               <SectionLabel number="02">Look before you decide</SectionLabel>
               <h2>See the work, not just the promise.</h2>
               <p>The product tour shows where salary, job growth, AI exposure, resume reframes, and networking routes live before you pre-order.</p>
-              <a href={DASHBOARD_PREVIEW_URL} className="outline-link">Open the sample dashboard <ArrowRight /></a>
             </div>
             <div id="tour-preview" className="dashboard-preview" aria-label="Illustrative CairnCareers dashboard preview">
               <div className="preview-top"><span>YOUR FIRST-MOVE MAP</span><span>Coverage 72%</span></div>
@@ -505,10 +482,6 @@ export default function Home() {
               </div>
               <div className="dashboard-bridge-action">
                 <p>The public preview is filled with invented data for Maya Rivera. It shows the actual shape of Premium without asking for an account.</p>
-                <a className="primary-cta dashboard-entry" href={DASHBOARD_PREVIEW_URL}>
-                  <LayoutDashboard /> Open sample dashboard <ArrowRight />
-                </a>
-                <span><ExternalLink /> Opens the public CairnCareers preview</span>
               </div>
             </div>
 
@@ -525,7 +498,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="proof" className="paper-section proof-section">
+        <section id="proof" className="paper-section proof-section" hidden aria-hidden="true">
           <div className="container">
             <div className="section-heading split-heading">
               <div>
@@ -584,38 +557,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="checklist-section">
-          <div className="container checklist-grid">
-            <div className="checklist-art">
-              <div className="field-guide-art" aria-label="Illustrated career-planning field guide">
-                <div className="guide-cover"><CairnMark /><span>First-job field guide</span><strong>7 QUESTIONS</strong></div>
-                <div className="guide-page"><span>01</span><i /><span>02</span><i /><span>03</span><i /></div>
-                <div className="guide-route"><i /><i /><i /></div>
-              </div>
-            </div>
-            <div className="checklist-copy">
-              <SectionLabel number="05">Useful even if you do not pre-order</SectionLabel>
-              <h2>Get the First-Job AI Readiness Checklist.</h2>
-              <p>Seven questions to separate durable work from automatable tasks before your next adviser or recruiter conversation.</p>
-              <form className="email-form" onSubmit={submitLead}>
-                <label htmlFor="checklist-email">Email address</label>
-                <div>
-                  <Mail aria-hidden="true" />
-                  <input id="checklist-email" type="email" required placeholder="you@school.edu" value={email} onChange={(event) => setEmail(event.target.value)} />
-                  <button type="submit" disabled={isLeadSubmitting}>{isLeadSubmitting ? "Saving…" : "Get the PDF"} <ArrowRight /></button>
-                </div>
-                <small>{leadCaptureEndpoint ? "Your email is saved, then the PDF downloads immediately. It is never emailed." : "Preview mode: connect the database endpoint before collecting emails. The checklist PDF can still be reviewed now."}</small>
-                <a className="checklist-preview-link" href={CHECKLIST_DOWNLOAD_URL} target="_blank" rel="noreferrer">Preview the free checklist PDF <ArrowRight /></a>
-              </form>
-            </div>
-          </div>
-        </section>
-
         <section id="pricing" className="pricing-section">
           <div className="container">
             <div className="section-heading split-heading">
               <div>
-                <SectionLabel number="06">Pricing</SectionLabel>
+                <SectionLabel number="04">Pricing</SectionLabel>
                 <h2>See the price before checkout.</h2>
               </div>
               <div className="locale-disclosure">
@@ -644,7 +590,7 @@ export default function Home() {
                 <div className="price"><strong>{proPlan.price}</strong><span>{proPlan.cadence}</span>{proPlan.savings && <em className="price-saving">{proPlan.savings}</em>}</div>
                 <ul><li><Check /> Everything in Free</li><li><Check /> Resume reframes</li><li><Check /> Monthly re-runs</li></ul>
               </article>
-              <article className="price-card featured-price">
+              <article id="premium-checkout" className="price-card featured-price">
                 <div className="price-ribbon">Limited Time prelaunch price</div>
                 <span className="price-for">Know my first move</span>
                 <h3>Premium</h3>
@@ -655,7 +601,7 @@ export default function Home() {
                     <button type="button" aria-pressed={premiumBilling === "annual"} className={premiumBilling === "annual" ? "active" : ""} onClick={() => setPremiumBilling("annual")}>Annual</button>
                   </div>
                 </div>
-                <div className="price"><s>{premiumPlan.regular} · 35% savings</s><strong>{premiumPlan.prelaunch}</strong><span>{premiumPlan.cadence}</span><em className="prelaunch-label">Limited Time prelaunch price</em></div>
+                <div className="price"><s>{premiumPlan.regular} · 35% savings</s><strong>{premiumPlan.prelaunch}</strong><span>{premiumPlan.cadence}</span><em className="prelaunch-label">Limited Time prelaunch price</em><small className="limited-spots">Limited spots remain</small></div>
                 <ul><li><Check /> Everything in Pro</li><li><Check /> Living resume + LinkedIn system</li><li><Check /> Warm-path networking engine</li><li><Check /> Graduation-timeline roadmap</li></ul>
                 <a className="primary-cta full-cta" href={premiumPaymentLink || "#stripe-payment-link"} onClick={handlePremiumCheckout} target={premiumPaymentLink ? "_blank" : undefined} rel={premiumPaymentLink ? "noreferrer" : undefined}>Continue to secure checkout <ArrowRight /></a>
                 <div id="stripe-payment-link" className="checkout-note"><LockKeyhole /> Stripe Payment Link for Premium {premiumBilling} will open here when configured.</div>
@@ -667,18 +613,12 @@ export default function Home() {
         <section id="about" className="about-section">
           <div className="container about-grid">
             <div>
-              <SectionLabel number="07">Why this exists</SectionLabel>
+              <SectionLabel number="05">Why this exists</SectionLabel>
               <h2>A guide should be honest about what it knows.</h2>
               <article className="founder-card">
                 <img src={ASSETS.founder} alt="Brooke Houck, PhD, founder of CairnCareers" width="300" height="300" loading="lazy" decoding="async" />
-                <div><span className="slot-badge">Built by a PhD research scientist</span><h3><a href="https://www.linkedin.com/in/brookehouck" target="_blank" rel="noreferrer">Brooke Houck, PhD · Founder</a></h3><p>Everyone has an opinion about AI. And a lot of people want to give you good advice. But work isn't the same anymore. Work has changed and is changing. Cairn Careers uses research standards you can read about openly. We give you data, not vibes, about what work looks like now and will look like 3 years from now.</p></div>
+                <div><span className="slot-badge">Built by a PhD research scientist</span><h3><a href="https://www.linkedin.com/in/brookehouck" target="_blank" rel="noreferrer">Brooke Houck, PhD · Founder</a></h3><p>“Everyone has an opinion about AI. And a lot of people want to give you good advice. But work isn't the same anymore. Work has changed and is changing. Cairn Careers uses research standards you can read about openly. We give you data, not vibes, about what work looks like now and will look like 3 years from now.”</p></div>
               </article>
-            </div>
-            <div className="trust-file">
-              <span className="slot-badge amber">Trust file · what is committed</span>
-              <div><FileCheck2 /><p><strong>Named public sources</strong><span>O*NET, peer-reviewed AI-exposure research, METR, and BLS context.</span></p></div>
-              <div><ShieldCheck /><p><strong>Privacy before intake</strong><span>Retention terms and consent flow publish before student data is collected.</span></p></div>
-              <div><Globe2 /><p><strong>Localization after demand</strong><span>Pilot routes stay explicit; translation expands only when support demand justifies it.</span></p></div>
             </div>
           </div>
         </section>
@@ -687,7 +627,7 @@ export default function Home() {
           <div className="container closing-inner">
             <span className="hero-eyebrow">The next marker is yours</span>
             <h2>Find my first move before pre-order pricing ends.</h2>
-            <a className="primary-cta" href="#pricing">Show me my career paths <ArrowRight /></a>
+            <a className="primary-cta" href="#premium-checkout">Show me my career paths <ArrowRight /></a>
             <p>Ends October 31 · {localized.note} · 30-day refund window after delivery</p>
           </div>
         </section>
@@ -695,28 +635,27 @@ export default function Home() {
 
       <footer className="site-footer">
         <div className="container footer-grid">
-          <div className="wordmark footer-mark"><CairnMark /><span><strong>Cairn</strong><small>Careers</small></span></div>
-          <p>Career context for college students and recent graduates.</p>
-          <div><a href="mailto:contact@cairncareers.com">contact@cairncareers.com</a><span>Privacy · Terms · Refunds</span></div>
+          <div className="footer-brand-block"><div className="wordmark footer-mark"><CairnMark /><span><strong>Cairn</strong><small>Careers</small></span></div><p>Career context for college students and recent graduates.</p><p className="footer-product-line">Cairn Careers is a product of <a href="https://phronesislabs.net" target="_blank" rel="noreferrer">Phronesis Labs, LLC</a>.</p></div>
+          <div className="footer-links"><a href="mailto:contact@cairncareers.com">contact@cairncareers.com</a><span><a href="https://privacy.cairncareers.com">Privacy</a> · <a href="https://terms.cairncareers.com">Terms</a> · <a href="https://refunds.cairncareers.com">Refunds</a></span></div>
         </div>
       </footer>
 
-      {showLeadTab && (
-        <button className="lead-tab" onClick={() => setShowLeadModal(true)}><Sparkles /> Free checklist</button>
+      {showTopButton && (
+        <button className="site-top" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Back to top"><ArrowUp /></button>
       )}
 
       {showLeadModal && (
         <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) dismissLead(); }}>
           <div className="lead-modal" role="dialog" aria-modal="true" aria-labelledby="lead-modal-title">
             <button className="modal-close" onClick={dismissLead} aria-label="Close checklist offer"><X /></button>
-            <span className="slot-badge">A useful exit, not a hard sell</span>
-            <h2 id="lead-modal-title">Not ready to pre-order?</h2>
-            <p>Take the seven-question First-Job AI Readiness Checklist into your next career conversation.</p>
+            <span className="slot-badge">Launch notification</span>
+            <h2 id="lead-modal-title">Want to know when Cairn Careers is live?</h2>
+            <p>Leave your email and we will let you know when the product is ready to use.</p>
             <form className="email-form modal-form" onSubmit={submitLead}>
               <label htmlFor="modal-email">Email address</label>
               <div><Mail /><input id="modal-email" type="email" required placeholder="you@school.edu" value={email} onChange={(event) => setEmail(event.target.value)} /></div>
-              <button type="submit" className="primary-cta" disabled={isLeadSubmitting}>{isLeadSubmitting ? "Saving…" : "Get the PDF"} <ArrowRight /></button>
-              <small>{leadCaptureEndpoint ? "Your email is saved, then the PDF downloads immediately. It is never emailed." : "Preview mode: connect the database endpoint before collecting emails."}</small>
+              <button type="submit" className="primary-cta" disabled={isLeadSubmitting}>{isLeadSubmitting ? "Saving…" : "Notify me at launch"} <ArrowRight /></button>
+              <small>{leadCaptureEndpoint ? "Your email is saved to the launch-notification list." : "Preview mode: connect the database endpoint before collecting emails."}</small>
             </form>
           </div>
         </div>
