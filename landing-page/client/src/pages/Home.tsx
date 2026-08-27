@@ -255,6 +255,19 @@ export default function Home() {
   }, [campaign, locale]);
 
   useEffect(() => {
+    const scrollToHash = () => {
+      const targetId = window.location.hash.slice(1);
+      if (!targetId) return;
+      window.requestAnimationFrame(() => {
+        window.setTimeout(() => document.getElementById(targetId)?.scrollIntoView({ block: "start" }), 0);
+      });
+    };
+    scrollToHash();
+    window.addEventListener("hashchange", scrollToHash);
+    return () => window.removeEventListener("hashchange", scrollToHash);
+  }, []);
+
+  useEffect(() => {
     const onScroll = () => setShowTopButton(window.scrollY > 300);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
