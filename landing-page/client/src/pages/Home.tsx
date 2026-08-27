@@ -586,7 +586,7 @@ export default function Home() {
               <h2>A guide should be honest about what it knows.</h2>
               <article className="founder-card">
                 <img src={ASSETS.founder} alt="Brooke Houck, PhD, founder of CairnCareers" width="300" height="300" loading="lazy" decoding="async" />
-                <div><span className="slot-badge">Built by a PhD research scientist</span><h3>Brooke Houck, PhD · Founder</h3><p>“Students deserve the same non-answers about AI and work that everyone else does: clickbait or a shrug. CairnCareers uses research standards you can read about openly.”</p></div>
+                <div><span className="slot-badge">Built by a PhD research scientist</span><h3>Brooke Houck, PhD · Founder</h3><p>Everyone has an opinion about AI. And a lot of people want to give you good advice. But work isn't the same anymore. Work has changed and is changing. Cairn Careers uses research standards you can read about openly. We give you data, not vibes, about what work looks like now and will look like 3 years from now.</p></div>
               </article>
             </div>
             <div className="trust-file">
