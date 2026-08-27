@@ -127,37 +127,35 @@ sup a{color:inherit; font-weight:700; text-decoration:none; border-bottom:2px so
 .toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(14px); background:var(--ink); color:var(--lime); border:3px solid var(--lime); font-family:"Space Mono",monospace; font-size:.74rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:11px 18px; opacity:0; pointer-events:none; transition:.2s; z-index:80}
 .toast.on{opacity:1; transform:translateX(-50%) translateY(0)}
 
-/* Roadmap: the drive stays on the route. The wheelie pivots over the rear tire,
-   then settles back onto the line before the car moves on. */
+/* The car moves smoothly along the route, then pivots over the rear tire for
+   a wheelie before settling level on the same route line. */
 .road{position:relative;height:122px;overflow:hidden;isolation:isolate}
 .road::after{content:"";position:absolute;z-index:1;left:0;right:0;bottom:17px;height:8px;border:2px solid var(--ink);border-radius:999px;background:linear-gradient(90deg,var(--cyan) 0 42%,var(--lime) 42% 72%,var(--magenta) 72% 100%);box-shadow:4px 4px 0 var(--ink)}
 .road::before{content:"";position:absolute;z-index:2;left:-96px;bottom:37px;width:62px;height:38px;opacity:0;background:radial-gradient(circle at 13px 26px,rgba(255,255,255,.96) 0 5px,transparent 6px),radial-gradient(circle at 26px 16px,rgba(255,255,255,.9) 0 8px,transparent 9px),radial-gradient(circle at 42px 25px,rgba(255,255,255,.84) 0 6px,transparent 7px),radial-gradient(circle at 53px 10px,rgba(255,255,255,.72) 0 4px,transparent 5px);filter:drop-shadow(2px 2px 0 rgba(11,11,11,.24))}
 .roadlabel{position:absolute;z-index:4;top:6px;left:2px;color:#3a3a3a;font-family:"Space Mono",monospace;font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
 .car{position:absolute;z-index:3;bottom:20px;left:-170px;width:156px;transform-origin:24% 74%;will-change:left,transform}
-.road.go .car{animation:drive 7.2s cubic-bezier(.28,.76,.4,1) forwards}
-.road.go::before{animation:rear-smoke 7.2s linear forwards}
+.road.go .car{animation:drive 8.4s linear forwards}
+.road.go::before{animation:rear-smoke 8.4s linear forwards}
 @keyframes drive{
   0%{left:-170px;transform:rotate(0deg)}
-  28%{left:3%;transform:rotate(0deg)}
-  53%{left:24%;transform:rotate(0deg)}
-  70%{left:49%;transform:rotate(0deg)}
-  82%{left:70%;transform:rotate(0deg)}
-  89%{left:calc(100% - 278px);transform:rotate(-11deg)}
-  94%{left:calc(100% - 230px);transform:rotate(-20deg)}
-  97%{left:calc(100% - 192px);transform:rotate(-8deg)}
-  100%{left:calc(100% - 160px);transform:rotate(0deg)}
+  30%{left:3%;transform:rotate(0deg)}
+  56%{left:27%;transform:rotate(0deg)}
+  76%{left:56%;transform:rotate(0deg)}
+  88%{left:72%;transform:rotate(0deg)}
+  91%{left:calc(100% - 188px);transform:rotate(0deg)}
+  94%,97%{left:calc(100% - 188px);transform:rotate(-18deg)}
+  100%{left:calc(100% - 188px);transform:rotate(0deg)}
 }
 @keyframes rear-smoke{
-  0%,82%{left:-96px;opacity:0;transform:scale(.3) translateY(10px)}
-  86%{left:calc(100% - 330px);opacity:.68;transform:scale(.45) translateY(8px)}
-  90%{left:calc(100% - 302px);opacity:.95;transform:scale(.85) translateY(0)}
-  94%{left:calc(100% - 258px);opacity:.9;transform:scale(1.15) translateY(-7px)}
-  97%{left:calc(100% - 220px);opacity:.58;transform:scale(1.4) translateY(-14px)}
-  100%{left:calc(100% - 182px);opacity:0;transform:scale(1.65) translateY(-24px)}
+  0%,90%{left:-96px;opacity:0;transform:scale(.3) translateY(10px)}
+  93%{left:calc(100% - 205px);opacity:.7;transform:scale(.5) translateY(6px)}
+  96%{left:calc(100% - 202px);opacity:.95;transform:scale(1.05) translateY(-3px)}
+  98%{left:calc(100% - 198px);opacity:.55;transform:scale(1.35) translateY(-14px)}
+  100%{left:calc(100% - 194px);opacity:0;transform:scale(1.6) translateY(-24px)}
 }
 .wheel{transform-box:fill-box;transform-origin:center}
-.road.go .wheel{animation:spin .5s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.road.go .wheel{animation:spin .5s linear 16 forwards}
+@keyframes spin{to{transform:rotate(5760deg)}}
 .termhead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
 .termhead .mono-sub{font-family:"Space Mono",monospace;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3a3a3a}
 .mon .eyebrow{display:inline-block;border-bottom:3px solid var(--magenta);padding-bottom:4px}
@@ -224,17 +222,7 @@ sup a{color:inherit; font-weight:700; text-decoration:none; border-bottom:2px so
   .hdr .chip{padding:5px 6px;letter-spacing:.06em}
   .road{height:112px}
   .car{width:128px}
-  @keyframes drive{
-    0%{left:-140px;transform:rotate(0deg)}
-    28%{left:2%;transform:rotate(0deg)}
-    53%{left:16%;transform:rotate(0deg)}
-    70%{left:34%;transform:rotate(0deg)}
-    82%{left:53%;transform:rotate(0deg)}
-    89%{left:calc(100% - 180px);transform:rotate(-11deg)}
-    94%{left:calc(100% - 157px);transform:rotate(-20deg)}
-    97%{left:calc(100% - 140px);transform:rotate(-8deg)}
-    100%{left:calc(100% - 130px);transform:rotate(0deg)}
-  }
+  @keyframes drive{0%{left:-140px;transform:rotate(0deg)}30%{left:2%;transform:rotate(0deg)}56%{left:16%;transform:rotate(0deg)}76%{left:34%;transform:rotate(0deg)}88%{left:53%;transform:rotate(0deg)}91%{left:calc(100% - 150px);transform:rotate(0deg)}94%,97%{left:calc(100% - 150px);transform:rotate(-18deg)}100%{left:calc(100% - 150px);transform:rotate(0deg)}}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}
 </style><link rel="icon" href="../brand/cairn-favicon.svg" type="image/svg+xml" sizes="any"><link rel="icon" href="../brand/cairn-favicon.svg" type="image/svg+xml" sizes="any"><style id="cairn-canonical-brand">
@@ -242,14 +230,6 @@ sup a{color:inherit; font-weight:700; text-decoration:none; border-bottom:2px so
 .mark img{display:block;width:36px;height:36px;object-fit:contain}
 .totop{position:fixed;right:22px;bottom:22px;z-index:70;width:48px;height:48px;padding:0;display:none;font-size:1.05rem;line-height:1}
 .totop.show{display:inline-flex}
-</style><style id="cairn-smooth-roadmap">
-	#drive .car{will-change:left,transform;transform-origin:24% 74%}
-	#drive.go .car{animation:cairn-smooth-drive 8.2s cubic-bezier(.16,.72,.25,1) forwards!important}
-	#drive.go::before{animation:cairn-rear-smoke 8.2s linear forwards!important}
-	#drive.go .wheel{animation:cairn-wheel-roll .5s linear 15 forwards!important}
-	@keyframes cairn-smooth-drive{0%{left:-170px;transform:translateY(0) rotate(0)}30%{left:3%;transform:translateY(0) rotate(0)}56%{left:27%;transform:translateY(0) rotate(0)}76%{left:56%;transform:translateY(0) rotate(0)}87%{left:72%;transform:translateY(0) rotate(0)}91%{left:calc(100% - 188px);transform:translateY(0) rotate(0)}94%{left:calc(100% - 188px);transform:translateY(-13px) rotate(-15deg)}97%{left:calc(100% - 188px);transform:translateY(-13px) rotate(-15deg)}100%{left:calc(100% - 188px);transform:translateY(0) rotate(0)}}
-	@keyframes cairn-rear-smoke{0%,90%{left:-96px;opacity:0;transform:scale(.3) translateY(10px)}93%{left:calc(100% - 170px);opacity:.9;transform:scale(.75) translateY(0)}96%{left:calc(100% - 184px);opacity:.65;transform:scale(1.22) translateY(-12px)}100%{left:calc(100% - 202px);opacity:0;transform:scale(1.55) translateY(-25px)}}
-	@keyframes cairn-wheel-roll{to{transform:rotate(5400deg)}}
 </style></head><body><header class="hdr"><div class="hdr-in"><a class="brand" href="../#top" aria-label="CairnCareers pricing"><span class="mark"><img src="../brand/cairn-icon.svg" width="36" height="36" alt="" aria-hidden="true"></span><span class="nm"><b>Cairn</b><span>Careers</span></span></a><nav aria-label="Dashboard sections"><a href="evidence.html">Evidence</a><a href="portfolio.html">Portfolio</a><a href="resume.html">Resume</a><a href="linkedin.html">LinkedIn</a><a href="network.html">Network</a><a href="interview.html">Interview</a><a href="careers.html">Careers</a><a href="roadmap.html" class="on">Roadmap</a><a href="cleanup.html">Clean-up</a></nav><div class="right"><a class="btn" href="../#dashboard-preview" style="padding:8px 12px;font-size:.62rem">Dashboard</a><a class="chip" href="../#pricing" style="text-decoration:none">Preorder now</a></div></div></header><div class="wrap"><div class="stack"><div><span class="eyebrow chipbrow">Sequenced to your start line</span><h1 class="t">Twelve months, mapped so the biggest gaps close first.</h1><p class="lede">This is not a list of good ideas. Each month is tied to a specific gap on your evidence page, sequenced so the earliest work makes the later work easier, with the breaks between terms doing real jobs of their own. It works the same whether you are still in classes or already out.</p></div><div class="mockbar">Sample dashboard. Every name and number here is invented so you can see how it works.</div><div class="sec"><div class="road" id="drive"><span class="roadlabel">The drive to your first job, Sep 2026 to Dec 2027</span><svg class="car" viewBox="0 0 240 92" aria-hidden="true"><g>
 <path d="M12 58 Q12 50 22 47 L60 40 Q92 34 128 36 L176 40 Q210 43 224 52 Q230 56 229 62 Q228 68 218 68 L22 68 Q12 68 12 58 Z" fill="#e02424" stroke="#0b0b0b" stroke-width="4"/>
 <rect x="96" y="29" width="48" height="9" fill="#0b0b0b"/>

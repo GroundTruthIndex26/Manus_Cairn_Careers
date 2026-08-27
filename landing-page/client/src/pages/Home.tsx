@@ -466,45 +466,30 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="dashboard-preview" className="ink-section tour-section">
-          <div className="container tour-grid">
-            <div>
-              <SectionLabel number="03">See the Sample Dashboard</SectionLabel>
-              <h2>See the Sample Dashboard before you decide.</h2>
-              <p>See where salary, job growth, AI exposure, resume reframes, and networking routes live before you pre-order.</p>
-            </div>
-            <div id="tour-preview" className="dashboard-preview" aria-label="Illustrative CairnCareers dashboard preview">
-              <div className="preview-top"><span>YOUR FIRST-MOVE MAP</span><span>Coverage 72%</span></div>
-              <div className="preview-grid">
-                <div className="preview-score"><span>AI exposure</span><strong>42</strong><small>moderate</small></div>
-                <div className="preview-chart"><i></i><i></i><i></i><i></i><i></i></div>
-                <div className="preview-list"><span>Durable task</span><span>Build stakeholder context</span><span>Next conversation</span></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="dashboard-bridge-section">
+        <section id="dashboard-preview" className="ink-section sample-dashboard-section">
           <div className="container">
-            <div className="dashboard-bridge-heading">
-              <div>
-                <SectionLabel number="03">See the Sample Dashboard</SectionLabel>
-                <h2>Explore every part of the Sample Dashboard.</h2>
-              </div>
-              <div className="dashboard-bridge-action">
-                <p>The Sample Dashboard is filled with invented data for Maya Rivera. Each card opens the full page for that area without asking for an account.</p>
-              </div>
+            <div className="sample-dashboard-heading">
+              <SectionLabel number="03">Sample Dashboard</SectionLabel>
+              <h2>See the Sample Dashboard before you decide.</h2>
+              <p>Below is the above-the-fold view from the Sample Dashboard, followed by smaller links to each of its nine full pages.</p>
             </div>
 
-            <div className="module-route-grid" aria-label="Sample Dashboard pages">
-              {dashboardAreas.map((area) => (
-                <a key={area.title} className={`module-route-card ${area.accent}`} href={area.href}>
-                  <div className="module-route-top"><span>{area.number}</span><ExternalLink aria-hidden="true" /></div>
-                  <h3>{area.title}</h3>
-                  <p>{area.body}</p>
-                  <span className="module-route-link">Open {area.title} <ArrowRight /></span>
-                </a>
-              ))}
+            <div className="sample-dashboard-frame" aria-label="Illustrative Sample Dashboard preview">
+              <div className="sample-dashboard-frame-head"><span>PREMIUM DASHBOARD</span><strong>Where you stand, Maya.</strong><span>Sample data</span></div>
+              <div className="sample-dashboard-overview">
+                <article className="sample-dashboard-metric lime-metric"><span>Coverage</span><strong>68</strong><small>of 100 · up 12 this term</small></article>
+                <article className="sample-dashboard-metric pink-metric"><span>What AI already does</span><strong>54%</strong><div className="mini-bar"><i /></div><small>Moderate exposure</small></article>
+                <article className="sample-dashboard-metric amber-metric"><span>Readiness</span><strong>64</strong><div className="mini-bar"><i /></div><small>One private clean-up flag</small></article>
+              </div>
+              <div className="sample-dashboard-modules" aria-label="Sample Dashboard pages">
+                {dashboardAreas.map((area) => (
+                  <a key={area.title} className={`module-route-card ${area.accent}`} href={area.href} aria-label={`Open ${area.title}`}>
+                    <span className="module-route-number">{area.number}</span>
+                    <strong>{area.title}</strong>
+                    <ExternalLink aria-hidden="true" />
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </section>

@@ -12,15 +12,7 @@ const canonicalDashboardBrandCss = `<style id="cairn-canonical-brand">
 
 const backToTopMarkup = `<button class="btn totop" id="totop" aria-label="Back to top">&#9650;</button><script>(function(){var b=document.getElementById("totop");if(!b)return;b.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})});function u(){b.classList.toggle("show",window.scrollY>300)}window.addEventListener("scroll",u,{passive:true});u()})();</script>`;
 
-const smoothRoadmapCss = `<style id="cairn-smooth-roadmap">
-	#drive .car{will-change:left,transform;transform-origin:24% 74%}
-	#drive.go .car{animation:cairn-smooth-drive 8.2s cubic-bezier(.16,.72,.25,1) forwards!important}
-	#drive.go::before{animation:cairn-rear-smoke 8.2s linear forwards!important}
-	#drive.go .wheel{animation:cairn-wheel-roll .5s linear 15 forwards!important}
-	@keyframes cairn-smooth-drive{0%{left:-170px;transform:translateY(0) rotate(0)}30%{left:3%;transform:translateY(0) rotate(0)}56%{left:27%;transform:translateY(0) rotate(0)}76%{left:56%;transform:translateY(0) rotate(0)}87%{left:72%;transform:translateY(0) rotate(0)}91%{left:calc(100% - 188px);transform:translateY(0) rotate(0)}94%{left:calc(100% - 188px);transform:translateY(-13px) rotate(-15deg)}97%{left:calc(100% - 188px);transform:translateY(-13px) rotate(-15deg)}100%{left:calc(100% - 188px);transform:translateY(0) rotate(0)}}
-	@keyframes cairn-rear-smoke{0%,90%{left:-96px;opacity:0;transform:scale(.3) translateY(10px)}93%{left:calc(100% - 170px);opacity:.9;transform:scale(.75) translateY(0)}96%{left:calc(100% - 184px);opacity:.65;transform:scale(1.22) translateY(-12px)}100%{left:calc(100% - 202px);opacity:0;transform:scale(1.55) translateY(-25px)}}
-	@keyframes cairn-wheel-roll{to{transform:rotate(5400deg)}}
-</style>`;
+const smoothRoadmapCss = "";
 
 const interviewRepairCss = `/* Interview answer: semantic source with readable landmarks. */
 .interview-answer{max-width:820px;margin-inline:auto;padding:28px 32px 34px;background:linear-gradient(135deg,#d9ff67 0%,var(--lime) 60%,#b5e741 100%);box-shadow:9px 9px 0 var(--ink),15px 15px 0 var(--magenta)}
