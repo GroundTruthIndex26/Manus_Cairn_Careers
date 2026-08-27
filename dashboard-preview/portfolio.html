@@ -134,6 +134,24 @@ sup a{color:inherit; font-weight:700; text-decoration:none; border-bottom:2px so
 .totop{position:fixed;right:22px;bottom:22px;z-index:70;width:48px;height:48px;padding:0;display:none;font-size:1.05rem;line-height:1}
 .totop.show{display:inline-flex}
 
+/* Portfolio page: make the sample title primary and move utilities into a quieter, shared card footer. */
+.stack>.sec:nth-child(4)>.g.g2{gap:24px}
+.stack>.sec:nth-child(4)>.g.g2>.card{display:flex;flex-direction:column;padding:22px 22px 18px}
+.stack>.sec:nth-child(4)>.g.g2>.card>div:first-child{align-items:center !important;padding:8px 10px;background:#f0f0eb;border:2px solid var(--ink)}
+.stack>.sec:nth-child(4)>.g.g2>.card>div:first-child .pip{padding:4px 8px;font-size:.65rem;box-shadow:2px 2px 0 var(--ink)}
+.stack>.sec:nth-child(4)>.g.g2>.card>div:first-child .eyebrow{font-size:.7rem;color:#394240}
+.stack>.sec:nth-child(4)>.g.g2>.card h3.t{font-size:1.34rem;line-height:1.08;margin-top:18px !important;max-width:24ch}
+.stack>.sec:nth-child(4)>.g.g2>.card>h3+div{margin-top:18px !important;padding:0 12px;background:#fffefa;border:1px solid #b4b2a8}
+.stack>.sec:nth-child(4)>.g.g2>.card>h3+div .kv{padding:11px 0;font-size:.87rem}
+.stack>.sec:nth-child(4)>.g.g2>.card>h3+div .kv span{font-family:"Space Mono",monospace;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#53615d}
+.stack>.sec:nth-child(4)>.g.g2>.card>h3+div .kv b{font-size:.79rem;line-height:1.35}
+.stack>.sec:nth-child(4)>.g.g2>.card .btnrow{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;margin-top:auto;padding:13px 0 0;border-top:2px solid #b8b5aa}
+.stack>.sec:nth-child(4)>.g.g2>.card .btnrow::before{content:"Sample utilities";font-family:"Space Mono",monospace;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#68706c}
+.stack>.sec:nth-child(4)>.g.g2>.card .btnrow .btn{min-height:32px;padding:7px 9px;font-size:.58rem;box-shadow:none;background:transparent;border-color:#777f7a;color:#303835}
+.stack>.sec:nth-child(4)>.g.g2>.card .btnrow .btn:first-child{border-color:var(--ink);background:#f5f4ee;color:var(--ink)}
+.stack>.sec:nth-child(4)>.g.g2>.card .btnrow .btn:hover{background:var(--cyan);border-color:var(--ink)}
+@media (max-width:640px){.stack>.sec:nth-child(4)>.g.g2>.card{padding:18px}.stack>.sec:nth-child(4)>.g.g2>.card h3.t{font-size:1.2rem}.stack>.sec:nth-child(4)>.g.g2>.card>h3+div{padding:0 10px}.stack>.sec:nth-child(4)>.g.g2>.card .btnrow{grid-template-columns:1fr 1fr}.stack>.sec:nth-child(4)>.g.g2>.card .btnrow::before{grid-column:1/-1}}
+
 
 @media (max-width:980px){
   .g2,.g3,.g4,.g-hero,.tiles{grid-template-columns:1fr}
