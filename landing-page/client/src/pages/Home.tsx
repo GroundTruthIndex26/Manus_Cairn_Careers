@@ -25,9 +25,16 @@ import {
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
+const BASE_URL = import.meta.env.BASE_URL;
 const ASSETS = {
-  hero: "/manus-storage/cairn-route-map-hero-optimized_902096c6.webp",
-  founder: "/manus-storage/cairn-founder_da875aec.webp",
+  hero: `${BASE_URL}media/cairn-route-map-hero.webp`,
+  founder: `${BASE_URL}media/cairn-founder.webp`,
+};
+
+const BRAND_ASSETS = {
+  icon: `${BASE_URL}brand/cairn-icon.svg`,
+  lightLogo: `${BASE_URL}brand/cairn-logo-light.svg`,
+  darkLogo: `${BASE_URL}brand/cairn-logo-dark.svg`,
 };
 
 type LocaleKey = "en-US" | "en-CA" | "en-GB";
@@ -84,70 +91,70 @@ const steps = [
   ["03", "Leave with a route", "A practical LinkedIn, networking, and first-conversation direction."],
 ];
 
-const DASHBOARD_PREVIEW_URL = "https://cairncareers.com/dashboard-preview/index.html";
+const DASHBOARD_PREVIEW_URL = `${BASE_URL}dashboard-preview/index.html`;
 
 const dashboardAreas = [
   {
     number: "01",
     title: "Evidence",
     body: "Turn real work into proof that strengthens a resume bullet, LinkedIn line, and interview answer.",
-    href: "https://cairncareers.com/dashboard-preview/evidence.html",
+    href: `${BASE_URL}dashboard-preview/evidence.html`,
     accent: "lime",
   },
   {
     number: "02",
     title: "Portfolio",
     body: "Keep the work itself beside the claim it supports—case studies, reports, prototypes, and decks.",
-    href: "https://cairncareers.com/dashboard-preview/portfolio.html",
+    href: `${BASE_URL}dashboard-preview/portfolio.html`,
     accent: "cyan",
   },
   {
     number: "03",
     title: "Resume",
     body: "See how one update can carry through a clean, standard resume built from real evidence.",
-    href: "https://cairncareers.com/dashboard-preview/resume.html",
+    href: `${BASE_URL}dashboard-preview/resume.html`,
     accent: "pink",
   },
   {
     number: "04",
     title: "LinkedIn",
     body: "Preview copyable profile blocks without scraping, password requests, or opaque automation.",
-    href: "https://cairncareers.com/dashboard-preview/linkedin.html",
+    href: `${BASE_URL}dashboard-preview/linkedin.html`,
     accent: "amber",
   },
   {
     number: "05",
     title: "Network",
     body: "Follow warm paths and use the exact message that makes a first outreach easier to send.",
-    href: "https://cairncareers.com/dashboard-preview/network.html",
+    href: `${BASE_URL}dashboard-preview/network.html`,
     accent: "cyan",
   },
   {
     number: "06",
     title: "Interview",
     body: "Practice a direct answer to the question every student expects: what will AI take over?",
-    href: "https://cairncareers.com/dashboard-preview/interview.html",
+    href: `${BASE_URL}dashboard-preview/interview.html`,
     accent: "lime",
   },
   {
     number: "07",
     title: "Careers",
     body: "Compare pay, growth, work location, and AI context without pretending money changes the score.",
-    href: "https://cairncareers.com/dashboard-preview/careers.html",
+    href: `${BASE_URL}dashboard-preview/careers.html`,
     accent: "amber",
   },
   {
     number: "08",
     title: "Roadmap",
     body: "See a term-by-term route that closes the biggest evidence gaps first.",
-    href: "https://cairncareers.com/dashboard-preview/roadmap.html",
+    href: `${BASE_URL}dashboard-preview/roadmap.html`,
     accent: "pink",
   },
   {
     number: "09",
     title: "Clean-up",
     body: "Understand the privacy-first path for sensitive context that should never be described to a model.",
-    href: "https://cairncareers.com/dashboard-preview/cleanup.html",
+    href: `${BASE_URL}dashboard-preview/cleanup.html`,
     accent: "lime",
   },
 ];
@@ -163,7 +170,7 @@ function SectionLabel({ number, children }: { number: string; children: React.Re
 
 function CairnMark() {
   return (
-    <img className="cairn-mark" src="/brand/cairn-icon.svg" alt="" aria-hidden="true" />
+    <img className="cairn-mark" src={BRAND_ASSETS.icon} alt="" aria-hidden="true" />
   );
 }
 
@@ -290,8 +297,7 @@ export default function Home() {
       <header className="site-header">
         <div className="container header-inner">
           <a href="#top" className="wordmark" aria-label="CairnCareers home">
-            <CairnMark />
-            <span><strong>Cairn</strong><small>Careers</small></span>
+            <img className="brand-logo brand-logo-light" src={BRAND_ASSETS.lightLogo} alt="CairnCareers" />
           </a>
           <nav className="desktop-nav" aria-label="Primary navigation">
             <a href="#how-it-works">How it works</a>
@@ -326,7 +332,7 @@ export default function Home() {
           <nav className="mobile-nav container" aria-label="Mobile navigation">
             <a onClick={() => setMobileOpen(false)} href="#how-it-works">How it works</a>
             <a onClick={() => setMobileOpen(false)} href="#dashboard-preview">Product preview</a>
-            <a onClick={() => setMobileOpen(false)} href="#proof">Proof plan</a>
+            <a onClick={() => setMobileOpen(false)} href="#proof">Proof</a>
             <a onClick={() => setMobileOpen(false)} href="#pricing">Pricing</a>
             <a onClick={() => setMobileOpen(false)} href="#about">About</a>
           </nav>
@@ -606,7 +612,7 @@ export default function Home() {
 
       <footer className="site-footer">
         <div className="container footer-grid">
-          <div className="wordmark footer-mark"><CairnMark /><span><strong>Cairn</strong><small>Careers</small></span></div>
+          <div className="wordmark footer-mark"><img className="brand-logo brand-logo-dark" src={BRAND_ASSETS.darkLogo} alt="CairnCareers" /></div>
           <p>Career context for college students and recent graduates.</p>
           <div><a href="mailto:contact@cairncareers.com">contact@cairncareers.com</a><span>Privacy · Terms · Refunds</span></div>
         </div>
