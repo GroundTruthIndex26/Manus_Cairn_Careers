@@ -231,7 +231,7 @@ export default function Home() {
     if (campaign === "default") params.delete("source");
     else params.set("source", campaign);
     const query = params.toString();
-    window.history.replaceState({}, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
+    window.history.replaceState({}, "", `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`);
   }, [campaign, locale]);
 
   useEffect(() => {
