@@ -131,6 +131,7 @@ img { max-width:100%; }
 .cairn-mark .stone-two { bottom:19px; width:21px; height:8px; transform:translateX(-50%) skewX(12deg); }
 .cairn-mark .stone-three { bottom:29px; width:12px; height:8px; transform:translateX(-50%) rotate(-5deg); }
 .cairn-mark:after { content:""; position:absolute; right:4px; bottom:4px; width:11px; height:2px; background:var(--cyan); transform:rotate(-35deg); }
+img.cairn-mark { background:transparent; border:0; box-shadow:3px 3px 0 var(--ink); object-fit:contain; }
 .wordmark span { display:flex; align-items:baseline; gap:5px; }
 .wordmark strong { font:400 28px/1 "Archivo Black",Impact,sans-serif; letter-spacing:-.045em; }
 .wordmark small { font:700 10px/1 "IBM Plex Mono",monospace; letter-spacing:.16em; text-transform:uppercase; }

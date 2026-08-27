@@ -163,11 +163,7 @@ function SectionLabel({ number, children }: { number: string; children: React.Re
 
 function CairnMark() {
   return (
-    <span className="cairn-mark" aria-hidden="true">
-      <i className="stone stone-one" />
-      <i className="stone stone-two" />
-      <i className="stone stone-three" />
-    </span>
+    <img className="cairn-mark" src="/brand/cairn-icon.svg" alt="" aria-hidden="true" />
   );
 }
 
