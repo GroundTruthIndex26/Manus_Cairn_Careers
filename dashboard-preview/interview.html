@@ -134,11 +134,40 @@ sup a{color:inherit; font-weight:700; text-decoration:none; border-bottom:2px so
 .totop{position:fixed;right:22px;bottom:22px;z-index:70;width:48px;height:48px;padding:0;display:none;font-size:1.05rem;line-height:1}
 .totop.show{display:inline-flex}
 
+/* Interview page: a realistic interview rehearsal, paced as prompt then response. */
+.stack>div:first-child h1.t{position:relative;min-height:4.1em;max-width:31ch;color:transparent}
+.stack>div:first-child h1.t::after{content:"Practice the questions employers actually ask.";position:absolute;inset:0;font-family:"Archivo Black",Impact,sans-serif;font-size:2.3rem;line-height:1.02;letter-spacing:-.02em;color:var(--ink)}
+.stack>div:first-child .lede{position:relative;min-height:3.2em;max-width:64ch;color:transparent}
+.stack>div:first-child .lede::after{content:"Build clear answers around your real evidence: a concise introduction, a behavioural example, and a role-specific response for UX research.";position:absolute;inset:0;font-size:1rem;line-height:1.55;color:#2a2a2a}
+.stack>.sec:nth-child(3)>.card.lime{max-width:880px;margin-inline:auto;padding:26px 28px 30px;background:linear-gradient(135deg,#d9ff67 0%,var(--lime) 60%,#b5e741 100%);box-shadow:9px 9px 0 var(--ink),15px 15px 0 var(--magenta)}
+.stack>.sec:nth-child(3)>.card.lime>div:first-child{display:grid !important;grid-template-columns:1fr auto;gap:10px 18px;align-items:start;padding-bottom:16px;border-bottom:2px solid rgba(11,11,11,.64)}
+.stack>.sec:nth-child(3)>.card.lime>div:first-child>span{font-size:0}
+.stack>.sec:nth-child(3)>.card.lime>div:first-child>span::before{content:"Interview question";display:block;font-family:"Space Mono",monospace;font-size:.63rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.stack>.sec:nth-child(3)>.card.lime>div:first-child::after{content:"“Tell me a little about yourself, and why do you want to work here?”";grid-column:1/-1;font-family:"Archivo Black",Impact,sans-serif;font-size:1.34rem;line-height:1.18;letter-spacing:-.015em;max-width:32ch}
+.stack>.sec:nth-child(3)>.card.lime>div:first-child .btn{grid-column:2;grid-row:1;padding:8px 10px;font-size:.6rem;box-shadow:3px 3px 0 var(--ink)}
+.stack>.sec:nth-child(3)>.card.lime>p{font-size:1rem !important;line-height:1.62 !important;max-width:60ch !important;margin:20px 0 0 !important;color:transparent}
+.stack>.sec:nth-child(3)>.card.lime>p::before{content:"ANSWER  ·  I’m an aspiring UX researcher with a Psychology and Design background. I’m drawn to this work because I like finding the real need underneath a request and giving a team a direction it can act on.";display:block;box-sizing:border-box;background:var(--ink);color:#fff;padding:14px 16px;font-family:"Space Grotesk",sans-serif;font-size:1.01rem;font-weight:600;line-height:1.48}
+.stack>.sec:nth-child(3)>.card.lime>p::after{content:"That is why this role stands out to me: it combines direct user contact with the chance to turn evidence into product decisions. In my internship, I ran 12 usability sessions, helped reduce task failure from 40 percent to 18 percent, and used AI to make the research workflow faster without handing over the judgment.";display:block;border-top:2px solid rgba(11,11,11,.66);margin-top:16px;padding-top:16px;font-size:1rem;line-height:1.62;color:#111}
+.stack>.sec:nth-child(3)>.card.lime>p>sup{display:none}
+.stack>.sec:nth-child(5)>.g{gap:20px}
+.stack>.sec:nth-child(5)>.g>.card.paper2{position:relative;padding:22px 22px 20px;border-width:2px;box-shadow:4px 4px 0 var(--ink)}
+.stack>.sec:nth-child(5)>.g>.card.paper2>span{font-size:0}
+.stack>.sec:nth-child(5)>.g>.card.paper2>span::after{display:block;font-family:"Archivo Black",Impact,sans-serif;font-size:1.08rem;line-height:1.18;letter-spacing:-.01em;max-width:27ch}
+.stack>.sec:nth-child(5)>.g>.card.paper2:first-child>span::after{content:"“Tell me about a time your research changed a product decision.”"}
+.stack>.sec:nth-child(5)>.g>.card.paper2:last-child>span::after{content:"“How would you approach an ambiguous usability question for our product team?”"}
+.stack>.sec:nth-child(5)>.g>.card.paper2>div{position:absolute;top:16px;right:16px}
+.stack>.sec:nth-child(5)>.g>.card.paper2 .btn{padding:7px 9px;font-size:.58rem;box-shadow:2px 2px 0 var(--ink)}
+.stack>.sec:nth-child(5)>.g>.card.paper2>p{font-size:.89rem !important;line-height:1.55 !important;color:transparent !important;margin-top:14px !important;max-width:43ch}
+.stack>.sec:nth-child(5)>.g>.card.paper2>p::after{display:block;font-size:.89rem;line-height:1.55;color:#2a2a2a}
+.stack>.sec:nth-child(5)>.g>.card.paper2:first-child>p::after{content:"Lead with the 12 usability sessions, describe the pattern you surfaced, and land on the 40-to-18 percent task-failure result."}
+.stack>.sec:nth-child(5)>.g>.card.paper2:last-child>p::after{content:"Start with the user and the decision at stake, choose the fastest appropriate research method, then show how you would turn the findings into a recommendation."}
+
 
 @media (max-width:980px){
   .g2,.g3,.g4,.g-hero,.tiles{grid-template-columns:1fr}
   h1.t{font-size:1.85rem}
   .big{font-size:3.4rem}
+  .stack>div:first-child h1.t::after{font-size:1.85rem}
 }
 @media (max-width:640px){
   .hdr-in{gap:12px}
