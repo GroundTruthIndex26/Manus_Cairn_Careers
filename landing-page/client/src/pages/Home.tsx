@@ -37,8 +37,29 @@ const BRAND_ASSETS = {
   darkLogo: `${BASE_URL}brand/cairn-logo-dark.svg`,
 };
 
+const CHECKLIST_DOWNLOAD_URL = `${BASE_URL}downloads/cairn-first-job-ai-readiness-checklist.pdf`;
+const leadCaptureEndpoint = import.meta.env.VITE_LEAD_CAPTURE_ENDPOINT || "";
+
 type LocaleKey = "en-US" | "en-CA" | "en-GB";
 type CampaignKey = "default" | "campus" | "social";
+type BillingCycle = "monthly" | "annual";
+
+const proPricing: Record<BillingCycle, { price: string; cadence: string; savings?: string }> = {
+  monthly: { price: "US$6", cadence: "USD / month" },
+  annual: { price: "US$46", cadence: "USD / year", savings: "35% savings" },
+};
+
+const premiumPricing: Record<BillingCycle, { regular: string; prelaunch: string; cadence: string }> = {
+  monthly: { regular: "US$11", prelaunch: "US$8", cadence: "USD / month" },
+  annual: { regular: "US$86", prelaunch: "US$61", cadence: "USD / year" },
+};
+
+// Add the two Stripe Payment Link URLs in the preview/deployment environment.
+// The CTAs become live checkout links as soon as these values are supplied.
+const premiumPaymentLinks: Record<BillingCycle, string> = {
+  monthly: import.meta.env.VITE_STRIPE_PREMIUM_MONTHLY_PAYMENT_LINK || "",
+  annual: import.meta.env.VITE_STRIPE_PREMIUM_ANNUAL_PAYMENT_LINK || "",
+};
 
 const localeOptions: Record<
   LocaleKey,
@@ -132,7 +153,7 @@ const dashboardAreas = [
   {
     number: "06",
     title: "Interview",
-    body: "Practice a direct answer to the question every student expects: what will AI take over?",
+    body: "Practice clear standard and role-specific answers grounded in evidence you can explain.",
     href: `${BASE_URL}dashboard-preview/interview.html`,
     accent: "lime",
   },
@@ -208,10 +229,13 @@ function MetricSlot({ label }: { label: string }) {
 export default function Home() {
   const [locale, setLocale] = useState<LocaleKey>("en-US");
   const [campaign, setCampaign] = useState<CampaignKey>("default");
+  const [proBilling, setProBilling] = useState<BillingCycle>("annual");
+  const [premiumBilling, setPremiumBilling] = useState<BillingCycle>("annual");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showLeadModal, setShowLeadModal] = useState(false);
   const [showLeadTab, setShowLeadTab] = useState(false);
   const [email, setEmail] = useState("");
+  const [isLeadSubmitting, setIsLeadSubmitting] = useState(false);
   const localized = localeOptions[locale];
   const message = campaignVariants[campaign];
 
@@ -259,25 +283,68 @@ export default function Home() {
         setShowLeadModal(true);
       }
     };
-    document.addEventListener("mouseleave", onLeave);
+    document.addEventListener("mouseout", onLeave);
     return () => {
       window.clearTimeout(armTimer);
       window.clearTimeout(mobileTimer);
-      document.removeEventListener("mouseleave", onLeave);
+      document.removeEventListener("mouseout", onLeave);
     };
   }, []);
 
   const visiblePrice = useMemo(() => localized.price, [localized.price]);
+  const proPlan = proPricing[proBilling];
+  const premiumPlan = premiumPricing[premiumBilling];
+  const premiumPaymentLink = premiumPaymentLinks[premiumBilling];
 
-  const submitLead = (event: FormEvent<HTMLFormElement>) => {
+  const handlePremiumCheckout = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (premiumPaymentLink) return;
+    event.preventDefault();
+    toast.message("Stripe Payment Link required", {
+      description: `Add VITE_STRIPE_PREMIUM_${premiumBilling.toUpperCase()}_PAYMENT_LINK to activate this checkout button.`,
+    });
+  };
+
+  const downloadChecklist = () => {
+    const download = document.createElement("a");
+    download.href = CHECKLIST_DOWNLOAD_URL;
+    download.download = "CairnCareers-First-Job-AI-Readiness-Checklist.pdf";
+    document.body.appendChild(download);
+    download.click();
+    download.remove();
+  };
+
+  const submitLead = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!email.trim()) return;
-    toast.success("Checklist request captured in this mockup", {
-      description: "Connect the production form to the approved email platform before launch.",
-    });
-    setEmail("");
-    setShowLeadModal(false);
-    sessionStorage.setItem("cairn-checklist-dismissed", "1");
+    if (!leadCaptureEndpoint) {
+      toast.error("Database capture is not configured for this preview", {
+        description: "Add VITE_LEAD_CAPTURE_ENDPOINT before collecting email addresses. You can preview the PDF below.",
+      });
+      return;
+    }
+
+    setIsLeadSubmitting(true);
+    try {
+      const response = await fetch(leadCaptureEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), source: "first-job-ai-readiness-checklist" }),
+      });
+      if (!response.ok) throw new Error("Lead capture request failed");
+      downloadChecklist();
+      toast.success("Saved. Your checklist download has started.", {
+        description: "The checklist is downloaded directly and is not emailed.",
+      });
+      setEmail("");
+      setShowLeadModal(false);
+      sessionStorage.setItem("cairn-checklist-dismissed", "1");
+    } catch {
+      toast.error("We could not save your email address", {
+        description: "The checklist was not downloaded. Please try again after the database connection is restored.",
+      });
+    } finally {
+      setIsLeadSubmitting(false);
+    }
   };
 
   const dismissLead = () => {
@@ -297,7 +364,8 @@ export default function Home() {
       <header className="site-header">
         <div className="container header-inner">
           <a href="#top" className="wordmark" aria-label="CairnCareers home">
-            <img className="brand-logo brand-logo-light" src={BRAND_ASSETS.lightLogo} alt="CairnCareers" />
+            <CairnMark />
+            <span><strong>Cairn</strong><small>Careers</small></span>
           </a>
           <nav className="desktop-nav" aria-label="Primary navigation">
             <a href="#how-it-works">How it works</a>
@@ -534,9 +602,10 @@ export default function Home() {
                 <div>
                   <Mail aria-hidden="true" />
                   <input id="checklist-email" type="email" required placeholder="you@school.edu" value={email} onChange={(event) => setEmail(event.target.value)} />
-                  <button type="submit">Send me my checklist <ArrowRight /></button>
+                  <button type="submit" disabled={isLeadSubmitting}>{isLeadSubmitting ? "Saving…" : "Get the PDF"} <ArrowRight /></button>
                 </div>
-                <small>One useful resource, then occasional product updates. Unsubscribe anytime.</small>
+                <small>{leadCaptureEndpoint ? "Your email is saved, then the PDF downloads immediately. It is never emailed." : "Preview mode: connect the database endpoint before collecting emails. The checklist PDF can still be reviewed now."}</small>
+                <a className="checklist-preview-link" href={CHECKLIST_DOWNLOAD_URL} target="_blank" rel="noreferrer">Preview the free checklist PDF <ArrowRight /></a>
               </form>
             </div>
           </div>
@@ -565,17 +634,31 @@ export default function Home() {
               <article className="price-card">
                 <span className="price-for">How do I get there?</span>
                 <h3>Pro</h3>
-                <div className="price"><strong>US$49</strong><span>USD / year</span></div>
+                <div className="price-toggle" role="group" aria-label="Pro billing frequency">
+                  <span>Choose billing</span>
+                  <div>
+                    <button type="button" aria-pressed={proBilling === "monthly"} className={proBilling === "monthly" ? "active" : ""} onClick={() => setProBilling("monthly")}>Monthly</button>
+                    <button type="button" aria-pressed={proBilling === "annual"} className={proBilling === "annual" ? "active" : ""} onClick={() => setProBilling("annual")}>Annual</button>
+                  </div>
+                </div>
+                <div className="price"><strong>{proPlan.price}</strong><span>{proPlan.cadence}</span>{proPlan.savings && <em className="price-saving">{proPlan.savings}</em>}</div>
                 <ul><li><Check /> Everything in Free</li><li><Check /> Resume reframes</li><li><Check /> Monthly re-runs</li></ul>
               </article>
               <article className="price-card featured-price">
-                <div className="price-ribbon">Pre-order · 66% savings</div>
+                <div className="price-ribbon">Limited Time prelaunch price</div>
                 <span className="price-for">Know my first move</span>
                 <h3>Premium</h3>
-                <div className="price"><s>US$89</s><strong>{visiblePrice}</strong><span>{localized.note}</span></div>
+                <div className="price-toggle premium-toggle" role="group" aria-label="Premium billing frequency">
+                  <span>Choose billing</span>
+                  <div>
+                    <button type="button" aria-pressed={premiumBilling === "monthly"} className={premiumBilling === "monthly" ? "active" : ""} onClick={() => setPremiumBilling("monthly")}>Monthly</button>
+                    <button type="button" aria-pressed={premiumBilling === "annual"} className={premiumBilling === "annual" ? "active" : ""} onClick={() => setPremiumBilling("annual")}>Annual</button>
+                  </div>
+                </div>
+                <div className="price"><s>{premiumPlan.regular} · 35% savings</s><strong>{premiumPlan.prelaunch}</strong><span>{premiumPlan.cadence}</span><em className="prelaunch-label">Limited Time prelaunch price</em></div>
                 <ul><li><Check /> Everything in Pro</li><li><Check /> Living resume + LinkedIn system</li><li><Check /> Warm-path networking engine</li><li><Check /> Graduation-timeline roadmap</li></ul>
-                <a className="primary-cta full-cta" href="#checkout-note">Show me my career paths <ArrowRight /></a>
-                <div id="checkout-note" className="checkout-note"><LockKeyhole /> Pre-order pricing ends October 31. Checkout charges US$30 USD.</div>
+                <a className="primary-cta full-cta" href={premiumPaymentLink || "#stripe-payment-link"} onClick={handlePremiumCheckout} target={premiumPaymentLink ? "_blank" : undefined} rel={premiumPaymentLink ? "noreferrer" : undefined}>Continue to secure checkout <ArrowRight /></a>
+                <div id="stripe-payment-link" className="checkout-note"><LockKeyhole /> Stripe Payment Link for Premium {premiumBilling} will open here when configured.</div>
               </article>
             </div>
           </div>
@@ -612,7 +695,7 @@ export default function Home() {
 
       <footer className="site-footer">
         <div className="container footer-grid">
-          <div className="wordmark footer-mark"><img className="brand-logo brand-logo-dark" src={BRAND_ASSETS.darkLogo} alt="CairnCareers" /></div>
+          <div className="wordmark footer-mark"><CairnMark /><span><strong>Cairn</strong><small>Careers</small></span></div>
           <p>Career context for college students and recent graduates.</p>
           <div><a href="mailto:contact@cairncareers.com">contact@cairncareers.com</a><span>Privacy · Terms · Refunds</span></div>
         </div>
@@ -632,8 +715,8 @@ export default function Home() {
             <form className="email-form modal-form" onSubmit={submitLead}>
               <label htmlFor="modal-email">Email address</label>
               <div><Mail /><input id="modal-email" type="email" required placeholder="you@school.edu" value={email} onChange={(event) => setEmail(event.target.value)} /></div>
-              <button type="submit" className="primary-cta">Send me my checklist <ArrowRight /></button>
-              <small>Email only. One resource, then occasional product updates.</small>
+              <button type="submit" className="primary-cta" disabled={isLeadSubmitting}>{isLeadSubmitting ? "Saving…" : "Get the PDF"} <ArrowRight /></button>
+              <small>{leadCaptureEndpoint ? "Your email is saved, then the PDF downloads immediately. It is never emailed." : "Preview mode: connect the database endpoint before collecting emails."}</small>
             </form>
           </div>
         </div>

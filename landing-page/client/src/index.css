@@ -138,6 +138,8 @@ img.cairn-mark { background:transparent; border:0; box-shadow:3px 3px 0 var(--in
 .brand-logo { display:block; width:222px; height:56px; object-fit:contain; }
 .brand-logo-light { background:var(--paper); }
 .brand-logo-dark { width:196px; height:49px; }
+.footer-mark strong { color:white; }
+.footer-mark small { color:var(--lime); }
 .desktop-nav { display:flex; align-items:center; gap:28px; font:700 12px/1 "IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:.07em; }
 .desktop-nav a { position:relative; }
 .desktop-nav a:after { content:""; position:absolute; left:0; right:100%; bottom:-7px; height:3px; background:var(--lime); transition:right 180ms var(--ease-out); }
@@ -327,6 +329,8 @@ img.cairn-mark { background:transparent; border:0; box-shadow:3px 3px 0 var(--in
 .email-form input { min-width:0; flex:1; height:54px; border:0; background:transparent; padding:0 12px; outline:0; }
 .email-form button { min-height:54px; display:flex; align-items:center; gap:8px; border:0; border-left:2px solid var(--ink); background:var(--ink); color:white; padding:0 16px; font:800 10px "IBM Plex Mono",monospace; text-transform:uppercase; }
 .email-form small { display:block; margin-top:12px; font-size:12px; }
+.checklist-preview-link { display:inline-flex; align-items:center; gap:7px; margin-top:16px; padding-bottom:3px; border-bottom:2px solid var(--cyan); font:800 10px "IBM Plex Mono",monospace; letter-spacing:.04em; text-transform:uppercase; }
+.checklist-preview-link svg { width:14px; height:14px; }
 
 .pricing-section { padding:105px 0; background:var(--paper-light); }
 .locale-disclosure { display:flex; align-items:center; gap:13px; padding:14px; border:2px solid var(--ink); background:white; box-shadow:5px 5px 0 var(--cyan); }
@@ -344,10 +348,17 @@ img.cairn-mark { background:transparent; border:0; box-shadow:3px 3px 0 var(--in
 .price-card:nth-child(2):after { content:"Marker 02 · prepare"; }
 .price-for { font:800 10px "IBM Plex Mono",monospace; text-transform:uppercase; color:#606760; }
 .price-card h3 { margin:12px 0; font-size:31px; }
+.price-toggle { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:18px 0 12px; padding:9px 10px; background:#eef0eb; border:1px solid #c8cbc5; }
+.price-toggle > span { font:800 8px "IBM Plex Mono",monospace; letter-spacing:.08em; text-transform:uppercase; color:#59605a; }
+.price-toggle > div { display:inline-flex; padding:2px; background:white; border:1px solid var(--ink); }
+.price-toggle button { border:0; min-height:29px; padding:0 9px; background:transparent; color:var(--ink); font:800 8px "IBM Plex Mono",monospace; letter-spacing:.05em; text-transform:uppercase; cursor:pointer; }
+.price-toggle button.active { background:var(--lime); box-shadow:2px 2px 0 var(--ink); }
 .price { min-height:104px; display:flex; flex-direction:column; justify-content:center; border-top:1px solid #c8cbc5; border-bottom:1px solid #c8cbc5; }
 .price strong { font:400 44px/1 "Archivo Black",Impact,sans-serif; }
 .price span { margin-top:5px; font-size:11px; color:#5c635d; }
 .price s { color:#6d736e; font:700 12px "IBM Plex Mono",monospace; }
+.price-saving,.prelaunch-label { display:inline-flex; align-self:flex-start; margin-top:8px; padding:3px 6px; font:800 8px "IBM Plex Mono",monospace; letter-spacing:.05em; text-transform:uppercase; font-style:normal; }
+.price-saving { background:var(--lime); color:var(--ink); }
 .price-card ul { display:grid; gap:12px; list-style:none; padding:20px 0 0; margin:0; }
 .price-card li { display:flex; align-items:flex-start; gap:8px; font-size:13px; }
 .price-card li svg { flex:0 0 auto; width:17px; height:17px; color:#5c9500; }
@@ -357,6 +368,13 @@ img.cairn-mark { background:transparent; border:0; box-shadow:3px 3px 0 var(--in
 .featured-price .price-for,.featured-price .price span { color:#aeb6b0; }
 .featured-price .price { border-color:#464d48; }
 .featured-price .price strong { color:var(--lime); }
+.featured-price .price s { color:#c6cdc7; }
+.premium-toggle { background:#202522; border-color:#4b524d; }
+.premium-toggle > span { color:#b6beb8; }
+.premium-toggle > div { background:#111; border-color:#707a72; }
+.premium-toggle button { color:#f5f8f2; }
+.premium-toggle button.active { color:var(--ink); background:var(--lime); }
+.prelaunch-label { background:var(--lime); color:var(--ink); }
 .featured-price li svg { color:var(--lime); }
 .full-cta { width:100%; margin-top:24px; }
 .checkout-note { display:flex; gap:8px; margin-top:16px; color:#c4cbc6; font-size:11px; }
@@ -400,6 +418,7 @@ img.cairn-mark { background:transparent; border:0; box-shadow:3px 3px 0 var(--in
 .modal-form > div { box-shadow:none; }
 .modal-form > div input { width:100%; }
 .modal-form > button { width:100%; margin-top:13px; border:2px solid var(--ink); background:var(--ink); color:white; box-shadow:4px 4px 0 var(--pink); }
+.email-form button:disabled { cursor:wait; opacity:.72; }
 
 @media (max-width:1020px) {
   .desktop-nav { display:none; }
