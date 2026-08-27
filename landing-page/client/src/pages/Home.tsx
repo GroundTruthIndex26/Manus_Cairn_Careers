@@ -300,7 +300,7 @@ export default function Home() {
           <nav className="desktop-nav" aria-label="Primary navigation">
             <a href="#how-it-works">How it works</a>
             <a href="#dashboard-preview">Product preview</a>
-            <a href="#proof">Proof plan</a>
+            <a href="#proof">Proof</a>
             <a href="#pricing">Pricing</a>
             <a href="#about">About</a>
           </nav>
@@ -586,7 +586,7 @@ export default function Home() {
               <h2>A guide should be honest about what it knows.</h2>
               <article className="founder-card">
                 <img src={ASSETS.founder} alt="Brooke Houck, PhD, founder of CairnCareers" width="300" height="300" loading="lazy" decoding="async" />
-                <div><span className="slot-badge">Built by a PhD research scientist</span><h3>Brooke Houck, PhD · Founder</h3><p>Everyone has an opinion about AI. And a lot of people want to give you good advice. But work isn't the same anymore. Work has changed and is changing. Cairn Careers uses research standards you can read about openly. We give you data, not vibes, about what work looks like now and will look like 3 years from now.</p></div>
+                <div><span className="slot-badge">Built by a PhD research scientist</span><h3><a href="https://www.linkedin.com/in/brookehouck" target="_blank" rel="noreferrer">Brooke Houck, PhD · Founder</a></h3><p>Everyone has an opinion about AI. And a lot of people want to give you good advice. But work isn't the same anymore. Work has changed and is changing. Cairn Careers uses research standards you can read about openly. We give you data, not vibes, about what work looks like now and will look like 3 years from now.</p></div>
               </article>
             </div>
             <div className="trust-file">

@@ -375,8 +375,10 @@ img { max-width:100%; }
 .closing-section { padding:100px 0; background:var(--lime); text-align:center; border-top:2px solid var(--ink); }
 .closing-inner { display:flex; flex-direction:column; align-items:center; }
 .closing-section h2 { max-width:880px; }
-.closing-section .primary-cta { margin-top:28px; background:var(--paper-light); }
-.closing-section p { font:700 11px "IBM Plex Mono",monospace; text-transform:uppercase; }
+.closing-section .primary-cta { position:relative; z-index:1; margin:28px 0 26px; background:var(--paper-light); }
+.closing-section p { max-width:100%; margin:0; padding:0 12px; font:700 11px/1.6 "IBM Plex Mono",monospace; text-transform:uppercase; }
+.founder-card h3 a { text-decoration:none; border-bottom:2px solid var(--pink); }
+.founder-card h3 a:hover { color:#2a726f; border-bottom-color:var(--cyan); }
 .site-footer { padding:54px 0; background:var(--ink); color:white; }
 .footer-grid { display:grid; grid-template-columns:auto 1fr auto; gap:34px; align-items:center; }
 .footer-mark .cairn-mark { border-color:var(--lime); box-shadow:3px 3px 0 var(--cyan); }
