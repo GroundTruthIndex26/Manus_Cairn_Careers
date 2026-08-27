@@ -139,6 +139,28 @@ sup a{color:inherit; font-weight:700; text-decoration:none; border-bottom:2px so
 /* Two-column split used on this page; collapses on small screens */
 .g-split{grid-template-columns:.9fr 1.1fr;align-items:center}
 
+/* Careers page: location and work mode visibly resolve into one adjusted-median result. */
+.card.chrome:has(#zip){position:relative;padding:56px 22px 24px;background:linear-gradient(145deg,#f6f8f7 0%,#d2dad7 100%);border:3px solid var(--ink);box-shadow:10px 10px 0 var(--ink),16px 16px 0 var(--cyan)}
+.card.chrome:has(#zip)::before{content:"Location  +  work mode  →  adjusted median";position:absolute;top:16px;left:20px;right:20px;padding:7px 10px;border:2px solid var(--ink);background:#fffefa;font-family:"Space Mono",monospace;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#272727}
+.card.chrome:has(#zip) .g-split{position:relative;gap:44px}
+.card.chrome:has(#zip) .g-split>div:first-child{position:relative;padding-left:22px}
+.card.chrome:has(#zip) .g-split>div:first-child::before{content:"";position:absolute;left:0;top:2px;bottom:2px;width:10px;border:2px solid var(--ink);background:var(--cyan)}
+.card.chrome:has(#zip) label.eyebrow,.card.chrome:has(#zip) #cond+.nothing{color:var(--ink)}
+.card.chrome:has(#zip) label.eyebrow{display:inline-block;padding:4px 6px;background:var(--cyan);border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.card.chrome:has(#zip) #zip{border-style:solid !important;border-color:var(--ink) !important;background:#fffefa !important;box-shadow:4px 4px 0 var(--cyan) !important}
+.card.chrome:has(#zip) #zipname{font-weight:700;color:#223b3d}
+.card.chrome:has(#zip) #zipname+div{background:rgba(255,255,255,.62);border-color:#8d9995 !important;color:#3d4744}
+.card.chrome:has(#zip) #cond{position:relative;padding:10px 0 0}
+.card.chrome:has(#zip) #cond::before{content:"2  Work mode";position:absolute;top:-22px;left:0;font-family:"Space Mono",monospace;font-size:.59rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2e3d3b}
+.card.chrome:has(#zip) #cond .btn{background:#fffefa;box-shadow:3px 3px 0 var(--ink)}
+.card.chrome:has(#zip) #cond .btn.on{background:var(--cyan);color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.card.chrome:has(#zip) .g-split>div:nth-child(2){position:relative;background:#101313 !important;border:3px solid var(--ink);border-top:10px solid var(--cyan) !important;padding:24px !important;box-shadow:7px 7px 0 var(--ink)}
+.card.chrome:has(#zip) .g-split>div:nth-child(2)::before{content:"3  Result";position:absolute;left:-3px;top:-35px;padding:4px 7px;background:var(--cyan);border:2px solid var(--ink);font-family:"Space Mono",monospace;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.card.chrome:has(#zip) .g-split>div:nth-child(2) .eyebrow,.card.chrome:has(#zip) .g-split>div:nth-child(2) .of{color:var(--cyan) !important}
+.card.chrome:has(#zip) .g-split>div:nth-child(2) .big{color:#fff !important}
+.card.chrome:has(#zip) .g-split>div:nth-child(2) .tiny{color:#c7d7d4 !important}
+@media (max-width:980px){.card.chrome:has(#zip){padding:52px 16px 20px}.card.chrome:has(#zip) .g-split{gap:48px}.card.chrome:has(#zip) .g-split>div:nth-child(2)::before{top:-35px}}
+
 @media (max-width:980px){
   .g2,.g3,.g4,.g-hero,.tiles,.g-split{grid-template-columns:1fr}
   h1.t{font-size:1.85rem}
