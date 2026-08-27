@@ -356,7 +356,7 @@ export default function Home() {
       <div className="deadline-bar">
         <div className="container deadline-inner">
           <span><CalendarDays /> Pre-order price ends October 31</span>
-          <span className="deadline-detail">Expected delivery October 21 · 30-day refund window</span>
+          <span className="deadline-detail">Launches October 31 · 30-day money-back guarantee</span>
         </div>
       </div>
 
@@ -419,7 +419,7 @@ export default function Home() {
               </div>
               <div className="purchase-context">
                 <div><strong>{visiblePrice}</strong><span>{localized.note}</span></div>
-                <div><strong>Ends Oct. 31</strong><span>Full refund if the ship date is missed</span></div>
+                <div><strong>Launches Oct. 31</strong><span>30-day money-back guarantee</span></div>
               </div>
             </div>
             <div className="hero-visual" aria-label="Career route from self-knowledge to an evidence-supported next move">
@@ -439,7 +439,7 @@ export default function Home() {
 
         <section className="trust-strip" aria-label="Trust and risk reversal">
           <div className="container trust-strip-grid">
-            <div><ShieldCheck /><span><strong>Full refund</strong> if CairnCareers misses October 21</span></div>
+            <div><ShieldCheck /><span><strong>30-day money-back guarantee</strong> · pre-launch: from launch · after launch: from purchase</span></div>
             <div><LockKeyhole /><span><strong>Secure checkout</strong> handled by Stripe</span></div>
             <div><Globe2 /><span><strong>USD labeled</strong> before checkout in every locale</span></div>
           </div>
@@ -624,7 +624,7 @@ export default function Home() {
             <span className="hero-eyebrow">The next marker is yours</span>
             <h2>Find my first move before pre-order pricing ends.</h2>
             <a className="primary-cta" href="#premium-checkout">Show me my career paths <ArrowRight /></a>
-            <p>Ends October 31 · {localized.note} · 30-day refund window after delivery</p>
+            <p>Launches October 31 · {localized.note} · 30-day money-back guarantee: pre-launch from launch; after launch from purchase</p>
           </div>
         </section>
       </main>

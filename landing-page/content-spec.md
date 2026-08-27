@@ -12,7 +12,7 @@
 
 **Secondary action:** Take a product tour
 
-**Risk reversal:** Pre-order pricing ends October 31. Full refund if CairnCareers misses the October 21 ship date, or within 30 days of delivery if it is not for you.
+**Risk reversal:** Launches October 31. The offer includes a plain 30-day money-back guarantee from launch during pre-launch and a 30-day money-back guarantee from the purchase date after launch.
 
 ## Controlled Acquisition Variants
 
