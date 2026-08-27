@@ -632,7 +632,7 @@ export default function Home() {
       <footer className="site-footer">
         <div className="container footer-grid">
           <div className="footer-brand-block"><div className="wordmark footer-mark"><CairnMark /><span><strong>Cairn</strong><small>Careers</small></span></div><p>Career context for college students and recent graduates.</p><p className="footer-product-line">Cairn Careers is a product of <a href="https://phronesislabs.net" target="_blank" rel="noreferrer">Phronesis Labs, LLC</a>.</p></div>
-          <div className="footer-links"><a href="mailto:contact@cairncareers.com">contact@cairncareers.com</a><span><a href="https://cairncareers.com/privacy">Privacy</a> · <a href="https://cairncareers.com/terms">Terms</a> · <a href={`${import.meta.env.BASE_URL}refunds.html`}>Refunds</a></span></div>
+          <div className="footer-links"><a href="mailto:contact@cairncareers.com">contact@cairncareers.com</a><span><a href={`${import.meta.env.BASE_URL}privacy.html`}>Privacy</a> · <a href="https://cairncareers.com/terms">Terms</a> · <a href={`${import.meta.env.BASE_URL}refunds.html`}>Refunds</a></span></div>
         </div>
       </footer>
 

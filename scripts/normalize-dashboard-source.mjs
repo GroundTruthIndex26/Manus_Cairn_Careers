@@ -45,7 +45,8 @@ for (const fileName of readdirSync(dashboardDir)) {
   html = html
     .replace(/<a([^>]*?)href="[^"]*"([^>]*)>\s*Dashboard\s*<\/a>/gi, '<a$1href="../#dashboard-preview"$2>Dashboard</a>')
     .replace(/<div style="padding:0 0 44px"><a class="btn" href="[^"]*">Back to all nine areas<\/a><\/div>/gi, '')
-    .replaceAll('href="https://privacy.cairncareers.com"', 'href="https://cairncareers.com/privacy"')
+    .replaceAll('href="https://privacy.cairncareers.com"', 'href="../privacy.html"')
+    .replaceAll('href="https://cairncareers.com/privacy"', 'href="../privacy.html"')
     .replaceAll('href="https://terms.cairncareers.com"', 'href="https://cairncareers.com/terms"')
     .replaceAll('href="https://refunds.cairncareers.com"', 'href="../refunds.html"')
     .replaceAll('href="https://cairncareers.com/refunds"', 'href="../refunds.html"');
